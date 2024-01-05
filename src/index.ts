@@ -1,0 +1,21 @@
+/// <reference types="@fastly/js-compute" />
+import {handleReq} from "./handler";
+import {IntegrationEnv} from "./env";
+import { ConfigStore } from "fastly:config-store";
+import {returnHttpResponse} from "./utils/returnHttpResponse";
+
+addEventListener("fetch", (event) => event.respondWith(handleRequest(event)));
+
+async function handleRequest(event: FetchEvent): Promise<Response> {
+    const request = event.request;
+    const clientIp = event.client.address
+    const config = new ConfigStore('Fingerprint');
+    const envObj : IntegrationEnv = {
+        AGENT_SCRIPT_DOWNLOAD_PATH: config.get('AGENT_SCRIPT_DOWNLOAD_PATH'),
+        GET_RESULT_PATH: config.get('GET_RESULT_PATH'),
+        PROXY_SECRET: config.get('PROXY_SECRET')
+    }
+    return handleReq(request, envObj, clientIp).then(returnHttpResponse)
+}
+
+// todo research how to run the app under a path such as /integration instead of /
