@@ -1,24 +1,35 @@
-# Default Starter Kit For TypeScript
+<p align="center">
+  <a href="https://fingerprint.com">
+    <picture>
+     <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/fingerprintjs/fingerprintjs-pro-cloudflare-worker/main/assets/logo_light.svg" />
+     <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/fingerprintjs/fingerprintjs-pro-cloudflare-worker/main/assets/logo_dark.svg" />
+     <img src="https://raw.githubusercontent.com/fingerprintjs/fingerprintjs-pro-cloudflare-worker/main/assets/logo_dark.svg" alt="Fingerprint logo" width="312px" />
+   </picture>
+  </a>
+<p align="center">
+<a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/:license-mit-blue.svg" alt="MIT license"></a>
 
-[![Deploy to Fastly](https://deploy.edgecompute.app/button)](https://deploy.edgecompute.app/deploy)
+> [!WARNING]
+> This integration is in Beta
 
-Get to know the Fastly Compute environment with a basic starter that demonstrates routing, simple synthetic responses and code comments that cover common patterns.
+# Fingerprint Pro Fastly Proxy Integration
 
-**For more details about other starter kits for Compute, see the [Fastly developer hub](https://developer.fastly.com/solutions/starters)**
+[Fingerprint](https://fingerprint.com) is a device intelligence platform offering 99.5% accurate visitor identification.
 
-## Features
-* Allow only requests with particular HTTP methods
-* Match request URL path and methods for routing
-* Build synthetic responses at the edge
+Fingerprint Fastly Proxy Integration is responsible for proxying identification and agent-download requests between your website and Fingerprint through your Fastly infrastructure. The integration uses [Fastly Compute services](https://www.fastly.com/products/compute). The property rules template is available in this repository.
 
-## Understanding the code
+## 🚧 Requirements and expectations
 
-This starter is intentionally lightweight, and requires no dependencies aside from the [`@fastly/js-compute`](https://www.npmjs.com/package/@fastly/js-compute) npm package. It will help you understand the basics of processing requests at the edge using Fastly. This starter includes implementations of common patterns explained in our [using Compute](https://developer.fastly.com/learning/compute/javascript/) and [VCL migration](https://developer.fastly.com/learning/compute/migrate/) guides.
+* **Integration in Beta**: Please report any issues to our support team.
 
-The starter doesn't require the use of any backends. Once deployed, you will have a Fastly service running on Compute that can generate synthetic responses at the edge.
+* **Limited to Enterprise plan**: The Fastly Proxy Integration is accessible and exclusively supported for customers on the **Enterprise** Plan. Other customers are encouraged to use [Custom subdomain setup](https://dev.fingerprint.com/docs/custom-subdomain-setup) or [Cloudflare Proxy Integration](https://dev.fingerprint.com/docs/cloudflare-integration).
 
-The template uses TypeScript to compile source files in `./src` into JS files in `./build`, which are then wrapped into `./bin/index.wasm` using the `js-compute-runtime` CLI tool bundled with the `@fastly/js-compute` npm package, and bundled into a `.tar.gz` file ready for deployment to Compute.
+* **Manual updates occasionally required**: The underlying data contract in the identification logic can change to keep up with browser updates. Using the Fastly Proxy Integration might require occasional manual updates on your side. Ignoring these updates will lead to lower accuracy or service disruption.
 
-## Security issues
+## How to install
 
-Please see our [SECURITY.md](SECURITY.md) for guidance on reporting security-related issues.
+TBD
+
+## License
+
+This project is licensed under the MIT license. See the [LICENSE](https://github.com/fingerprintjs/fingerprint-pro-fastly-proxy-integration/blob/main/LICENSE) file for more info.
