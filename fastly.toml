@@ -1,26 +1,21 @@
 # This file describes a Fastly Compute package. To learn more visit:
 # https://developer.fastly.com/reference/fastly-toml/
 
-authors = ["Automation Token (3wkV9wiz5v9j0Q46OThYv7)"]
+authors = []
 cloned_from = "https://github.com/fastly/compute-starter-kit-typescript"
 description = ""
 language = "javascript"
 manifest_version = 3
 name = "fingerprint-pro-fastly-proxy-integration"
-service_id = "xqGjstmAkYLkZIQ1uHVSX3"
+service_id = ""
 
 [scripts]
   build = "yarn build"
   post_init = "yarn install"
 
-[local_server]
-  [local_server.backends]
-    [local_server.backends.fpcdn]
-      url = "http://localhost:8099"
-      override_host = "fpcdn.io"
-    [local_server.backends.fpjs]
-      url = "http://localhost:8099"
-      override_host = "api.fpjs.io"
-#    [local_server.backends.xyz]
-#      url = "http://localhost:8099"
-#      override_host = "necipallef.com"
+#[local_server]
+#  [local_server.backends]
+#    [local_server.backends.fpcdn]
+#      url = "http://localhost:1234"
+#    [local_server.backends.fpjs]
+#      url = "http://localhost:1234"
