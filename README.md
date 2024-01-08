@@ -69,7 +69,7 @@ Pick a domain for Fingerprint Fastly service to use. Refrain from using the word
 1. Go to [Fastly dashboard](https://manage.fastly.com/secure)'s **Secure** page, select **TLS management**.
 2. Click **Secure domain** or **Secure another domain**. Select **Use certificates Fastly obtains for you**.
 3. Enter your domain and click **Add**.
-4. Select Certification authority and TLS configuration. Click **Submit**.
+4. Configure Certification authority and TLS configuration according to your needs. Click **Submit**.
 5. Follow the instructions to validate the ownership of the domain.
 6. After the validation is done, find your domain in [the list of domains](https://manage.fastly.com/network/domains), click **view details** and see the CNAME record which is in the form of `{letter}.sni.global.fastly.net`. Create a CNAME record for this value via your DNS provider.
 
