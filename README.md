@@ -54,7 +54,7 @@ Clone [Fingerprint Pro Fastly Proxy Integration](https://github.com/fingerprintj
 
 ### Add author email
 
-Go to `fastly.toml` file and add your email to `authors` field. The line `authors = []` becomes `authors = ["my-eamil@my-company.com"]` assuming `my-email@my-company.com` is your email address.
+Go to `fastly.toml` file and add your email to `authors` field. The line `authors = []` becomes `authors = ["my-email@my-company.com"]` assuming `my-email@my-company.com` is your email address.
 
 ### Deploy the service
 
