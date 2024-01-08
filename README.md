@@ -88,7 +88,7 @@ We will add two backends, `fpcdn.io` and `api.fpjs.io`.
 2. Click **Origins** on the left menu.
 3. Click **Create Host**, type `fpcdn.io` and click **Add**.
 4. Click edit on the previously created host. Change its name to `fpcdn`. Scroll down to find **Override host** field and input `fpcdn.io`. Click **Update** to save changes.
-5. Click **Create Host**, type `api.fpis.io` and click **Add**.
+5. Click **Create Host**, type `api.fpjs.io` and click **Add**.
 6. Click edit on the previously created host. Change its name to `fpjs`. Scroll down to find **Override host** field and input `api.fpjs.io`. Click **Update** to save changes.
 
 > [!WARNING]
