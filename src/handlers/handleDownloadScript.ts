@@ -12,9 +12,8 @@ function makeDownloadScriptRequest(request: Request): Promise<Response> {
     const newRequest = new Request(url.toString(), request)
     newRequest.headers.delete('Cookie')
 
-    // todo handle cache durations
     console.log(`Downloading script from cdnEndpoint ${url.toString()}...`)
-    return fetch(newRequest, {backend: 'fpcdn' })//.then((res) => createResponseWithMaxAge(res, maxMaxAge, maxSMaxAge))
+    return fetch(newRequest, {backend: 'fpcdn' })
 }
 
 export async function handleDownloadScript(request: Request): Promise<Response> {

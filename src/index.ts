@@ -17,5 +17,3 @@ async function handleRequest(event: FetchEvent): Promise<Response> {
     }
     return handleReq(request, envObj, clientIp).then(returnHttpResponse)
 }
-
-// todo research how to run the app under a path such as /integration instead of /
