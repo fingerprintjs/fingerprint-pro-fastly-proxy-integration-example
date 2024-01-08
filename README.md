@@ -16,7 +16,7 @@
 
 [Fingerprint](https://fingerprint.com) is a device intelligence platform offering 99.5% accurate visitor identification.
 
-Fingerprint Fastly Proxy Integration is responsible for proxying identification and agent-download requests between your website and Fingerprint through your Fastly infrastructure. The integration uses [Fastly Compute services](https://www.fastly.com/products/compute). The property rules template is available in this repository.
+Fingerprint Fastly Proxy Integration is responsible for proxying identification and agent-download requests between your website and Fingerprint through your Fastly infrastructure. The integration uses [Fastly Compute services](https://www.fastly.com/products/compute).
 
 ## 🚧 Requirements and expectations
 
