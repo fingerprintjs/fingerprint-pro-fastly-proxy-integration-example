@@ -30,9 +30,9 @@ Fingerprint Fastly Proxy Integration is responsible for proxying identification 
 
 You need a Fastly account to use the integration. You must [create a Fastly account](https://www.fastly.com/signup) if you don't already have one.
 
-### Preparation
+### 1. Preparation
 
-1. Create your Proxy Secret on Fingerprint dashboard. 
+1. Create your Proxy Secret in the Fingerprint dashboard. 
     - Go to the Fingerprint [dashboard](https://dashboard.fingerprint.com/) and select your application.
     - In the left menu, click _App settings_ and switch to the _API keys_ tab.
     - Click **Create Proxy Key**.
