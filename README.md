@@ -28,37 +28,56 @@ Fingerprint Fastly Proxy Integration is responsible for proxying identification 
 
 ## How to install
 
-You need a Fastly account to use the integration. You must [create a Fastly account](https://www.fastly.com/signup) if you don't already have one.
+This guide assumes you already have a [Fastly account](https://www.fastly.com/signup) and a [Fingerprint account](https://fingerprint.com/signup).
 
-### 1. Preparation
+### 1. Create a Fingerprint Proxy Secret
 
-1. Create your Proxy Secret in the Fingerprint dashboard. 
-    - Go to the Fingerprint [dashboard](https://dashboard.fingerprint.com/) and select your application.
-    - In the left menu, click _App settings_ and switch to the _API keys_ tab.
-    - Click **Create Proxy Key**.
-    - Input `Fastly Integration` for the name field.
-    - Click **Create API Key**.
+1. Go to the Fingerprint [dashboard](https://dashboard.fingerprint.com/) and select your application.
+2. In the left menu, click _App settings_ and switch to the _API keys_ tab.
+3. Click **Create Proxy Key**.
+4. Name the key `Fastly Integration`.
+5. Click **Create API Key**.
+
+You will use the secret to authenticate requests from your proxy integration to the Fingerprint API. 
+
 2. Make decision for agent download path and identification path. Examples: `/463n7-d0wnl04d` for agent download and `/1d3n71f1c4710n-r35ul7` for identification. Make sure they are randomized.
 
-### Generate an API Token
+### 2. Create a Fastly API token
 
-[Create an API Token](https://docs.fastly.com/en/guides/using-api-tokens) in your Fastly dashboard for authentication. Make sure the token has `global` scope. Name your token `Fingerprint`.
+1. [Create a Fastly API Token]([https://docs.fastly.com/en/guides/using-api-tokens](https://docs.fastly.com/en/guides/using-api-tokens#creating-api-tokens)) in your Fastly dashboard. 
+2. Make sure the token has `global` scope.
+3. Name your token `Fingerprint`.
+4. Note the value of your token somewhere. You will use it in the following step to deploy the proxy integration to your Fastly account.
 
-### Install Fastly CLI
+### 3. Install and configure the Fastly CLI
 
-Follow [this guide](https://developer.fastly.com/learning/compute/#install-the-fastly-cli) to install the Fastly CLI and authenticate. You will use the API Token from previous step
+1. Install the Fastly CLI on your computer following [Fastly documentation](https://developer.fastly.com/learning/compute/#install-the-fastly-cli).
+2. Configure the CLI profile with the token you created in the previous step:
+   
+    ```
+    fastly profile create
+    ```
 
-### Clone the repository and install dependencies
+### 4. Clone this repository and prepare it for deployment
 
-Clone [Fingerprint Pro Fastly Proxy Integration](https://github.com/fingerprintjs/fingerprint-pro-fastly-proxy-integration) repo to your local machine. After it is done, run `yarn install`.
+1. `git clone git@github.com:fingerprintjs/fingerprint-pro-fastly-proxy-integration.git`
+2. `cd fingerprint-pro-fastly-proxy-integration`
+3. `yarn install`
+4. Inside the `fastly.toml` file, add your email to `authors` field. 
 
-### Add author email
-
-Go to `fastly.toml` file and add your email to `authors` field. The line `authors = []` becomes `authors = ["my-email@my-company.com"]` assuming `my-email@my-company.com` is your email address.
+    ```diff
+    - authors = []
+    + authors = ["your.name@yourcompany.com"]
+    ```
 
 ### Deploy the service
 
-Run `yarn deploy`. It will prompt to create a new service, type `y` to create a new service and type `fingerprint-pro-fastly-proxy-integration` for the service name. Skip through the rest of the prompts by pressing enter. This will create the service under one of Fastly's domains, `{host}.edgecompute.app`. We will change this later.
+1. Run `yarn deploy`.
+2. It will prompt to create a new service. Type `y` to create a new service.
+3. You can keep `fingerprint-pro-fastly-proxy-integration` as the service name.
+4. Skip through the rest of the prompts by pressing enter.
+  
+Fastly will create the service under one of it's domains, `{host}.edgecompute.app`. We will change this in the following step.
 
 ### Create a domain for the service
 
