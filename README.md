@@ -33,7 +33,7 @@ This guide assumes you already have a [Fastly account](https://www.fastly.com/si
 ### 1. Create a Fingerprint Proxy Secret
 
 1. Go to the Fingerprint [dashboard](https://dashboard.fingerprint.com/) and select your application.
-2. In the left menu, click _App settings_ and switch to the _API keys_ tab.
+2. Navigate to **App settings** > **API keys**.
 3. Click **Create Proxy Key**.
 4. Name the key `Fastly Integration`.
 5. Click **Create API Key**.
@@ -42,7 +42,7 @@ You will use the secret to authenticate requests from your proxy integration to 
 
 ### 2. Create a Fastly API token
 
-1. [Create a Fastly API Token]([https://docs.fastly.com/en/guides/using-api-tokens](https://docs.fastly.com/en/guides/using-api-tokens#creating-api-tokens)) in your Fastly dashboard. 
+1. [Create a Fastly API Token](https://docs.fastly.com/en/guides/using-api-tokens#creating-api-tokens) in your Fastly dashboard. 
 2. Make sure the token has `global` scope.
 3. Name your token `Fingerprint`.
 4. Note the value of your token somewhere. You will use it in the following step to deploy the proxy integration to your Fastly account.
@@ -58,9 +58,9 @@ You will use the secret to authenticate requests from your proxy integration to 
 
 ### 4. Clone this repository and prepare it for deployment
 
-1. `git clone git@github.com:fingerprintjs/fingerprint-pro-fastly-proxy-integration.git`
-2. `cd fingerprint-pro-fastly-proxy-integration`
-3. `yarn install`
+1. Run `git clone git@github.com:fingerprintjs/fingerprint-pro-fastly-proxy-integration.git`
+2. Run `cd fingerprint-pro-fastly-proxy-integration`
+3. Run `yarn install`
 4. Inside the `fastly.toml` file, add your email to `authors` field. 
 
     ```diff
@@ -71,26 +71,26 @@ You will use the secret to authenticate requests from your proxy integration to 
 ### 5. Deploy the service
 
 1. Run `yarn deploy`.
-2. It will prompt to create a new service. Type `y` to create a new service.
+2. Type `y` to create a new service.
 3. You can keep `fingerprint-pro-fastly-proxy-integration` as the service name.
-4. Skip through the rest of the prompts by pressing enter.
+4. Skip through the rest of the prompts by pressing `Enter`.
   
-Fastly will create the service under one of it's domains, `{host}.edgecompute.app`. We will change later. 
+Fastly will create the service under one of it's domains, `{host}.edgecompute.app`. We will change it later. 
 At this point the service is still returning `{"error":"something went wrong"}` as it requires more configuration.
 
 ### 6. Configure service backends in Fastly
 
 We will add two backends, `fpcdn.io` and `api.fpjs.io`. 
 
-1. Go to your Fingerprint service in [Fastly dashboard](https://manage.fastly.com/services/all) and select latest editable version. If you don't have a editable version, click **Edit Configuration** and **Clone version N (active) to edit** to create an editable version of the service. 
+1. Go to your Fingerprint service in the [Fastly dashboard](https://manage.fastly.com/services/all) and select the latest editable version. If you don't have a editable version, click **Edit Configuration** and **Clone version N (active) to edit** to create an editable version of the service. 
 2. Click **Origins** on the left menu.
 3. Click **Create Host**, type `fpcdn.io` and click **Add**.
-4. Click edit on the previously created host.
+4. Click **Edit** on the previously created host.
     - Change its name to `fpcdn`.
     - Scroll down and set **Override host** to `fpcdn.io`.
     - Click **Update** to save changes.
 6. Click **Create Host**, type `api.fpjs.io` and click **Add**.
-7. Click edit on the previously created host.
+7. Click **Edit**  on the previously created host.
    - Change its name to `fpjs`.
    - Scroll down and set **Override host** to `api.fpjs.io`.
    - Click **Update** to save changes.
@@ -104,38 +104,41 @@ We will add two backends, `fpcdn.io` and `api.fpjs.io`.
 2. Click **Create a config store**.
 3. Name the config store *exactly* `Fingerprint` (the store name is hard-coded in the service implementation) and click **Add**. 
 4. Click **Link to services** and select `fingerprint-pro-fastly-proxy-integration`.
-5. Click **Next**, select the latest version of your service and click **Link only**.
+5. Click **Next**, select the current (draft) version of your service and click **Link only**.
 6. Click **Finish**.
 7. Find your new config store and click **Key-value pairs** and add the following values:
    - set `AGENT_SCRIPT_DOWNLOAD_PATH` to your chosen agent download path. It should be something random to avoid ad blockers, for example `463n7-d0wnl04d`.
    - set `GET_RESULT_PATH` to your chosen identification result path. It should be something random to avoid ad blockers, for example `1d3n71f1c4710n-r35ul7`.
    - set `PROXY_SECRET` to the value of your Fingerprint proxy secret you created in Step 1.
 
-### 8. Create a domain for the service
+
+### 8. Activate the service
+
+1. Go to the Fingerprint service in [Fastly dashboard](https://manage.fastly.com/services/all) and select latest editable version.
+2. Click **Activate** (if you see **Validating** instead, wait for it to complete).
+
+Wait for a couple of minutes for activation. At this point the integration works should be functional on the Fastly-provided domain. Go to `https://{host}.edgecompute.app/status` to verify that you can see the integration's status page. 
+
+### 9. Create a domain for the service
 
 We reccommned to use a subdomain of your main website. If you want to use an apex domain, see the [Fastly documentation](https://docs.fastly.com/en/guides/using-fastly-with-apex-domains).
 Do not use `fingerprint`, `fpjs` and other fingerprint-related terms in the subdomain to avoid ad blockers. Use something random or generic, for example: `metrics.yourwebsite.com`.
 
-1. Go to the [Fastly dashboard](https://manage.fastly.com/secure)'s **Secure** page, select **TLS management**.
-2. Click **Secure domain** or **Secure another domain**. Select **Use certificates Fastly obtains for you**.
-3. Enter your domain and click **Add**.
-4. Configure Certification authority and TLS configuration according to your needs. Click **Submit**.
-5. Follow the instructions to validate the ownership of the domain.
-6. After the validation is done, find your domain in [the list of domains](https://manage.fastly.com/network/domains), click **view details** and see the CNAME record which is in the form of `{letter}.sni.global.fastly.net`. Create a CNAME record for your domain using this value via your DNS provider.
+1. Navigate to  [Fastly dashboard](https://manage.fastly.com/secure) > **Secure** > **Manage certificates**.
+2. Click **Secure domain** or **Secure another domain**.
+3. Select **Use certificates Fastly obtains for you**.
+4. Enter your domain and click **Add**.
+5. Configure Certification authority and TLS configuration according to your needs and click **Submit**.
+6. Follow the instructions on screen to validate the ownership of the domain.
+7. After the validation is done, find your domain in [the list of domains](https://manage.fastly.com/network/domains), click **view details** and see the CNAME record which is in the form of `{letter}.sni.global.fastly.net`. Create a CNAME record for your domain using this value via your DNS provider.
 
 ### Add the domain
-
 
 2. Click `Domains` on the left menu.
 3. Click **Create Domain**, type the domain you've previously created.
 4. Click **Add** to save changes.
 
-### Activate the service
 
-1. Go to Fingerprint service in [Fastly dashboard](https://manage.fastly.com/services/all) and select latest editable version.
-2. Click **Activate** (if you see **Validating** instead, wait for it to complete).
-
-Wait for a couple of minutes for activation and then the installation is complete.
 
 ## How to use
 
