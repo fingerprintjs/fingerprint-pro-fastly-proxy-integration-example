@@ -32,7 +32,7 @@ function buildHeaders(styleNonce: string): Headers {
 function createVersionElement(): string {
     return `
   <span>
-  ℹ️ Integration version: 0.1.0
+  ℹ️ Integration version: 0.1.1
   </span>
   `
 }
