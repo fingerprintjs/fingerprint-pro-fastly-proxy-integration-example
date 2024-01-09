@@ -11,7 +11,7 @@ async function handleRequest(event: FetchEvent): Promise<Response> {
     try {
         const request = event.request;
         const clientIp = event.client.address
-        const config = new ConfigStore('Fingerprinta');
+        const config = new ConfigStore('Fingerprint');
         const envObj: IntegrationEnv = {
             AGENT_SCRIPT_DOWNLOAD_PATH: config.get('AGENT_SCRIPT_DOWNLOAD_PATH'),
             GET_RESULT_PATH: config.get('GET_RESULT_PATH'),
