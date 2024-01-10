@@ -115,8 +115,7 @@ Provide the proxy secret and your chosen resource paths to the service.
 
 ### 8. Create a domain for the service
 
-We recommend using a subdomain of your main website. If you want to use an apex domain, see the [Fastly documentation](https://docs.fastly.com/en/guides/using-fastly-with-apex-domains).
-Do not use `fingerprint`, `fpjs`, and other fingerprint-related terms in the subdomain to avoid ad blockers. Use something random or generic, for example: `metrics.yourwebsite.com`.
+We recommend using a subdomain of the website you want to use Fingerprint on. Do not use `fingerprint`, `fpjs`, and other fingerprint-related terms in the subdomain to avoid ad blockers. Use something random or generic, for example: `metrics.yourwebsite.com`.
 
 1. Navigate to the [Fastly dashboard](https://manage.fastly.com/secure) > **Secure** > **TLS Management**.
 2. Click **Secure domain** or **Secure another domain**.
