@@ -9,147 +9,185 @@
 <p align="center">
 <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/:license-mit-blue.svg" alt="MIT license"></a>
 
-> [!WARNING]
-> This integration is in Beta
+> [!CAUTION]
+> This is an example of a custom Fingerprint proxy integration with Fastly. The example is still in the **BETA** stage of development and support is provided only to specific Enterprise customers. If that is not you, do not use this example in production.
 
-# Fingerprint Pro Fastly Proxy Integration
+# Fingerprint Pro Fastly Proxy Integration Example
 
 [Fingerprint](https://fingerprint.com) is a device intelligence platform offering 99.5% accurate visitor identification.
 
-Fingerprint Fastly Proxy Integration is responsible for proxying identification and agent-download requests between your website and Fingerprint through your Fastly infrastructure. The integration uses [Fastly Compute services](https://www.fastly.com/products/compute).
+This custom Fastly Proxy Integration example is responsible for proxying identification and agent-download requests between your application and Fingerprint through your Fastly infrastructure. This example uses [Fastly Compute services](https://www.fastly.com/products/compute).
 
 ## 🚧 Requirements and expectations
 
-* **Integration in Beta**: Please report any issues to our support team.
+* **Integration example in Beta**: Please report any issues to our support team.
 
-* **Limited to Enterprise plan**: The Fastly Proxy Integration is accessible and exclusively supported for customers on the **Enterprise** Plan. Other customers are encouraged to use [Custom subdomain setup](https://dev.fingerprint.com/docs/custom-subdomain-setup) or [Cloudflare Proxy Integration](https://dev.fingerprint.com/docs/cloudflare-integration).
+* **Limited to specific Enterprise customers**: At this point, this custom integration example is accessible and exclusively supported for specific customers on the  **Enterprise** Plan. Other customers are encouraged to use [Custom subdomain setup](https://dev.fingerprint.com/docs/custom-subdomain-setup) or [Cloudflare Proxy Integration](https://dev.fingerprint.com/docs/cloudflare-integration).
 
 * **Manual updates occasionally required**: The underlying data contract in the identification logic can change to keep up with browser updates. Using the Fastly Proxy Integration might require occasional manual updates on your side. Ignoring these updates will lead to lower accuracy or service disruption.
 
 ## How to install
 
-You need a Fastly account to use the integration. You must [create a Fastly account](https://www.fastly.com/signup) if you don't already have one.
+This guide assumes you already have a [Fastly account](https://www.fastly.com/signup) and a [Fingerprint account](https://fingerprint.com/signup).
 
-### Preparation
+### 1. Create a Fingerprint Proxy Secret
 
-1. Create your Proxy Secret on Fingerprint dashboard. 
-    - Go to the Fingerprint [dashboard](https://dashboard.fingerprint.com/) and select your application.
-    - In the left menu, click _App settings_ and switch to the _API keys_ tab.
-    - Click **Create Proxy Key**.
-    - Input `Fastly Integration` for the name field.
-    - Click **Create API Key**.
-2. Make decision for agent download path and identification path. Examples: `/463n7-d0wnl04d` for agent download and `/1d3n71f1c4710n-r35ul7` for identification. Make sure they are randomized.
+1. Go to the Fingerprint [dashboard](https://dashboard.fingerprint.com/) and select your application.
+2. Navigate to **App settings** > **API keys**.
+3. Click **Create Proxy Key**.
+4. Name the key `Fastly Integration`.
+5. Click **Create API Key**.
 
-### Generate an API Token
+You will use the secret to authenticate requests from your proxy integration to the Fingerprint API. 
 
-[Create an API Token](https://docs.fastly.com/en/guides/using-api-tokens) in your Fastly dashboard for authentication. Make sure the token has `global` scope. Name your token `Fingerprint`.
+### 2. Create a Fastly API token
 
-### Install Fastly CLI
+1. [Create a Fastly API Token](https://docs.fastly.com/en/guides/using-api-tokens#creating-api-tokens) in your Fastly dashboard. 
+2. Make sure the token has a `global` scope.
+3. Name your token `Fingerprint`.
+4. Note the value of your token somewhere. You will use it in the following step to deploy the proxy integration to your Fastly account.
 
-Follow [this guide](https://developer.fastly.com/learning/compute/#install-the-fastly-cli) to install the Fastly CLI and authenticate. You will use the API Token from previous step
+### 3. Install and configure the Fastly CLI
 
-### Clone the repository and install dependencies
+1. Install the Fastly CLI on your computer following [Fastly documentation](https://developer.fastly.com/learning/compute/#install-the-fastly-cli).
+2. Configure the CLI profile with the token you created in the previous step:
+   
+    ```
+    fastly profile create
+    ```
 
-Clone [Fingerprint Pro Fastly Proxy Integration](https://github.com/fingerprintjs/fingerprint-pro-fastly-proxy-integration) repo to your local machine. After it is done, run `yarn install`.
+### 4. Clone this repository and prepare it for deployment
 
-### Add author email
+1. Run `git clone git@github.com:fingerprintjs/fingerprint-pro-fastly-proxy-integration-example.git`
+2. Run `cd fingerprint-pro-fastly-proxy-integration-example`
+3. Run `yarn install`
+4. Inside the `fastly.toml` file, add your email to the `authors` field. 
 
-Go to `fastly.toml` file and add your email to `authors` field. The line `authors = []` becomes `authors = ["my-email@my-company.com"]` assuming `my-email@my-company.com` is your email address.
+    ```diff
+    - authors = []
+    + authors = ["your.name@yourcompany.com"]
+    ```
 
-### Deploy the service
+### 5. Deploy the service
 
-Run `yarn deploy`. It will prompt to create a new service, type `y` to create a new service and type `fingerprint-pro-fastly-proxy-integration` for the service name. Skip through the rest of the prompts by pressing enter. This will create the service under one of Fastly's domains, `{host}.edgecompute.app`. We will change this later.
+1. Run `yarn deploy`.
+2. Type `y` to create a new service.
+3. You can keep `fingerprint-pro-fastly-proxy-integration` as the service name.
+4. Skip through the rest of the prompts by pressing `Enter`.
+  
+Fastly will create the service under one of its domains, `{host}.edgecompute.app`. We will change it later. 
+At this point, the service is still returning an error like `{"error":"something went wrong"}` as it requires more configuration.
 
-### Create a domain for the service
+### 6. Configure the service backends in Fastly
 
-Fastly Compute services need a domain for access. You may use a subdomain of your main website. If you like to use an apex domain, follow [this guide](https://docs.fastly.com/en/guides/using-fastly-with-apex-domains).
+Add two backends, `fpcdn.io` and `api.fpjs.io`. 
 
-Pick a domain for Fingerprint Fastly service to use. Refrain from using the word `fingerprint` or `fpjs` in the subdomain. An example could be `metrics.yourwebsite.com`.
-
-1. Go to [Fastly dashboard](https://manage.fastly.com/secure)'s **Secure** page, select **TLS management**.
-2. Click **Secure domain** or **Secure another domain**. Select **Use certificates Fastly obtains for you**.
-3. Enter your domain and click **Add**.
-4. Configure Certification authority and TLS configuration according to your needs. Click **Submit**.
-5. Follow the instructions to validate the ownership of the domain.
-6. After the validation is done, find your domain in [the list of domains](https://manage.fastly.com/network/domains), click **view details** and see the CNAME record which is in the form of `{letter}.sni.global.fastly.net`. Create a CNAME record for your domain using this value via your DNS provider.
-
-### Add the domain
-
-1. Go to Fingerprint service in [Fastly dashboard](https://manage.fastly.com/services/all) and select latest editable version. If you don't have a editable version, click **Edit Configuration** and **Clone version N (active) to edit** to create an editable version of the service. 
-2. Click `Domains` on the left menu.
-3. Click **Create Domain**, type the domain you've previously created.
-4. Click **Add** to save changes.
-
-### Add backends
-
-We will add two backends, `fpcdn.io` and `api.fpjs.io`. 
-
-1. Go to Fingerprint service in [Fastly dashboard](https://manage.fastly.com/services/all) and select latest editable version.
-2. Click **Origins** on the left menu.
+1. Go to your Fingerprint service in the [Fastly dashboard](https://manage.fastly.com/services/all) and select the latest editable version. If you don't have an editable version, click **Edit Configuration** and **Clone version N (active) to edit** to create an editable version of the service. 
+2. In the left menu, click **Origins**.
 3. Click **Create Host**, type `fpcdn.io` and click **Add**.
-4. Click edit on the previously created host. Change its name to `fpcdn`. Scroll down to find **Override host** field and input `fpcdn.io`. Click **Update** to save changes.
-5. Click **Create Host**, type `api.fpjs.io` and click **Add**.
-6. Click edit on the previously created host. Change its name to `fpjs`. Scroll down to find **Override host** field and input `api.fpjs.io`. Click **Update** to save changes.
+4. Click **Edit** on the previously created host.
+    - Change its name to `fpcdn`.
+    - Scroll down and set **Override host** to `fpcdn.io`.
+    - Click **Update** to save changes.
+6. Click **Create Host**, type `api.fpjs.io` and click **Add**.
+7. Click **Edit**  on the previously created host.
+   - Change its name to `fpjs`.
+   - Scroll down and set **Override host** to `api.fpjs.io`.
+   - Click **Update** to save changes.
 
 > [!WARNING]
-> If you are using a different region than US with Fingerprint, then you must input corresponding endpoints, `eu.api.fpjs.io` for EU region and `ap.api.fpjs.io` for AP region.
+> If you are not using the Global/US [Fingerprint region](https://dev.fingerprint.com/docs/regions), instead of `api.fpjs.io` use `eu.api.fpjs.io` for the EU region or `ap.api.fpjs.io` for AP region.
 
-### Add config store
+### 7. Add a config store to the service
 
-1. Go to [Resources tab](https://manage.fastly.com/resources/config-stores).
-2. Click **Create a config store**. Input **Fingerprint** as the name of the config store.
-3. Click on **Link to services**, select `fingerprint-pro-fastly-proxy-integration`, click **Next** and click **Link only**. Click **Finish**.
-4. Find the config stored named **Fingerprint**, click **Key-value pairs** and add the values from the [preparation](#preparation) step:
-   - `AGENT_SCRIPT_DOWNLOAD_PATH` as the key and your agent download path as the value.
-   - `GET_RESULT_PATH` as the key and your identification path as the value.
-   - `PROXY_SECRET` as the key and your Fingerprint proxy secret as the value.
+Provide the proxy secret and your chosen resource paths to the service.
 
-### Activate the service
+1. In Fastly, go to the [Resources tab](https://manage.fastly.com/resources/config-stores).
+2. Click **Create a config store**.
+3. Name the config store *exactly* `Fingerprint` (the store name is hard-coded in the service implementation) and click **Add**. 
+4. Click **Link to services** and select `fingerprint-pro-fastly-proxy-integration`.
+5. Click **Next**, select the current (draft) version of your service, and click **Link only**.
+6. Click **Finish**.
+7. Find your new config store and click **Key-value pairs** to add the following values:
+   - set `AGENT_SCRIPT_DOWNLOAD_PATH` to your chosen agent download path. It should be something random to avoid ad blockers, for example, `463n7-d0wnl04d`.
+   - set `GET_RESULT_PATH` to your chosen identification result path. It should be something random to avoid ad blockers, for example, `1d3n71f1c4710n-r35ul7`.
+   - set `PROXY_SECRET` to the value of your Fingerprint proxy secret you created in Step 1.
 
-1. Go to Fingerprint service in [Fastly dashboard](https://manage.fastly.com/services/all) and select latest editable version.
+### 8. Create a domain for the service
+
+We recommend using a subdomain of the website you want to use Fingerprint on. Do not use `fingerprint`, `fpjs`, and other fingerprint-related terms in the subdomain to avoid ad blockers. Use something random or generic, for example: `metrics.yourwebsite.com`.
+
+1. Navigate to the [Fastly dashboard](https://manage.fastly.com/secure) > **Secure** > **TLS Management**.
+2. Click **Secure domain** or **Secure another domain**.
+3. Select **Use certificates Fastly obtains for you**.
+4. Enter your domain and click **Add**.
+5. Configure Certification Authority and TLS configuration according to your needs and click **Submit**.
+6. Follow the instructions on the screen to validate the ownership of the domain.
+7. When the validation is done, find your domain in the list of [Domains](https://manage.fastly.com/network/domains).
+8. Click **View details** and find the CNAME record associated with the domain in the form of `{letter}.sni.global.fastly.net`.
+9. Using your DNS provider, create a CNAME record for your subdomain with this value (`CNAME metrics.yourwebsite.com -> {letter}.sni.global.fastly.net`)
+
+### 9. Add the domain to the service
+
+1. Go to your Fingerprint service in the [Fastly dashboard](https://manage.fastly.com/services/all) and select the latest editable version.
+2. In the left menu, click **Domains**.
+3. Click **Create Domain** and type the domain you've previously created.
+4. Click **Add** to save changes.
+
+### 10. Activate the service
+
+1. Go to the Fingerprint service in [Fastly dashboard](https://manage.fastly.com/services/all) and select the latest editable version.
 2. Click **Activate** (if you see **Validating** instead, wait for it to complete).
 
-Wait for a couple of minutes for activation and then the installation is complete.
+Wait a couple of minutes for the activation. You can go to `metrics.yourwebsite.com/status` to verify that your integration is running.
 
-## How to use
+### 11. Configure the Fingerprint client agent to use your service
 
 Configure the Fingerprint client agent to make requests to your integration instead of the default Fingerprint APIs.
 
-- Set endpoint to the path of your identification proxy endpoint, for example, `https://YOUR_DOMAIN/YOUR_IDENTIFICATION_PATH`.
-- For browsers and web-based mobile applications, set the `scriptUrlPattern` to the path of your agent-download proxy endpoint, for example, `https://YOUR_DOMAIN/YOUR_AGENT_PATH?apiKey=<apiKey>&version=<version>&loaderVersion=<loaderVersion>`.
+- Set `endpoint` to the path of your `GET_RESULT_PATH` endpoint, for example, `https://metrics.yourwebsite.com/1d3n71f1c4710n-r35ul7`.
+- For websites and web-based mobile applications using one of our SDKs, set the `scriptUrlPattern` to the path of your `AGENT_SCRIPT_DOWNLOAD_PATH` endpoint, for example, `https://metrics.yourwebsite.com/463n7-d0wnl04d?apiKey=<apiKey>&version=<version>&loaderVersion=<loaderVersion>`.
     - Keep the query parameters as displayed here, including `<` and `>`.
-    - The CDN installation method pattern looks slightly different: `https://metrics.yourwebsite.com/YOUR_AGENT_PATH?apiKey=PUBLIC_API_KEY`, see the full code examples below.
+
+The CDN installation method pattern looks slightly different: `https://metrics.yourwebsite.com/463n7-d0wnl04d?apiKey=PUBLIC_API_KEY`, see the full code examples below.
+
+#### Using the Fingerprint Pro NPM Package
+
+The same principle applies to our [client SDKs](https://dev.fingerprint.com/docs/frontend-libraries).
 
 ```js
-// Pro JS Agent (NPM)
-import * as FingerprintJS from '@fingerprintjs/fingerprintjs-pro'
+import * as FingerprintJS from "@fingerprintjs/fingerprintjs-pro";
 
-// Initialize the agent at application startup.
 const fpPromise = FingerprintJS.load({
-    apiKey: your-public-api-key,
-    scriptUrlPattern: [
-        'https://YOUR_DOMAIN/YOUR_AGENT_PATH?apiKey=<apiKey>&version=<version>&loaderVersion=<loaderVersion>',
-        FingerprintJS.defaultScriptUrlPattern, // Fallback to default CDN in case of error
-    ],
-    endpoint: [
-        'https://YOUR_DOMAIN/YOUR_IDENTIFICATION_PATH',
-        FingerprintJS.defaultEndpoint // Fallback to default endpoint in case of error
-    ],
+  apiKey: PUBLIC_API_KEY,
+  scriptUrlPattern: [
+    "https://metrics.yourwebsite.com/AGENT_SCRIPT_DOWNLOAD_PATH?apiKey=<apiKey>&version=<version>&loaderVersion=<loaderVersion>",
+    FingerprintJS.defaultScriptUrlPattern, // Fallback to default CDN in case of error
+  ],
+  endpoint: [
+    "https://metrics.yourwebsite.com/GET_RESULT_PATH",
+    FingerprintJS.defaultEndpoint, // Fallback to default endpoint in case of error
+  ],
 });
 ```
+#### Importing the JS agent directly from CDN
+
 ```js
-// Pro JS Agent (CDN)
-const url = 'https://YOUR_DOMAIN/YOUR_AGENT_PATH?apiKey=your-public-api-key';
+const url = "https://metrics.yourwebsite.com/AGENT_SCRIPT_DOWNLOAD_PATH?apiKey=PUBLIC_API_KEY";
 const fpPromise = import(url).then((FingerprintJS) =>
-    FingerprintJS.load({
-        endpoint: [
-            'https://YOUR_DOMAIN/YOUR_IDENTIFICATION_PATH',
-            FingerprintJS.defaultEndpoint, // Fallback to default endpoint in case of error
-        ],
-    })
+  FingerprintJS.load({
+    endpoint: [
+      "https://metrics.yourwebsite.com/GET_RESULT_PATH",
+      FingerprintJS.defaultEndpoint, // Fallback to default endpoint in case of error
+    ],
+  }),
 );
 ```
 
+## Feedback and support
+
+Please reach out to our [Customer Success team](https://fingerprint.com/support/) if run into any issues with the integration.
+
 ## License
 
-This project is licensed under the MIT license. See the [LICENSE](https://github.com/fingerprintjs/fingerprint-pro-fastly-proxy-integration/blob/main/LICENSE) file for more info.
+This project is licensed under the [MIT license](./LICENSE).
