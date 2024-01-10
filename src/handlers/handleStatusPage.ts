@@ -7,6 +7,7 @@ import {
     getResultPathVarName,
     proxySecretVarName,
 } from '../env'
+import packageJson from '../../package.json'
 
 function generateNonce() {
     let result = ''
@@ -28,11 +29,10 @@ function buildHeaders(styleNonce: string): Headers {
     return headers
 }
 
-// todo read from package.json
 function createVersionElement(): string {
     return `
   <span>
-  ℹ️ Integration version: 0.1.1
+  ℹ️ Integration version: ${packageJson.version}
   </span>
   `
 }

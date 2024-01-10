@@ -8,11 +8,12 @@
     "lib": [ "es2022" ],
     "rootDir": "src",
     "outDir": "build",
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "resolveJsonModule": true
   },
   "include": [
     "./src/**/*.js",
-    "./src/**/*.ts",
+    "./src/**/*.ts"
   ],
   "exclude": [
     "node_modules"

@@ -1,4 +1,5 @@
-const INT_VERSION = '0.1.1' // todo read from package.json
+import packageJson from '../../package.json'
+const INT_VERSION = packageJson.version
 const PARAM_NAME = 'ii'
 
 function getTrafficMonitoringValue(type: 'procdn' | 'ingress'): string {
