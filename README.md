@@ -58,8 +58,8 @@ You will use the secret to authenticate requests from your proxy integration to 
 
 ### 4. Clone this repository and prepare it for deployment
 
-1. Run `git clone git@github.com:fingerprintjs/fingerprint-pro-fastly-proxy-integration.git`
-2. Run `cd fingerprint-pro-fastly-proxy-integration`
+1. Run `git clone git@github.com:fingerprintjs/fingerprint-pro-fastly-proxy-integration-example.git`
+2. Run `cd fingerprint-pro-fastly-proxy-integration-example`
 3. Run `yarn install`
 4. Inside the `fastly.toml` file, add your email to the `authors` field. 
 
