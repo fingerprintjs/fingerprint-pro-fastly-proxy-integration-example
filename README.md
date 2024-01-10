@@ -10,13 +10,13 @@
 <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/:license-mit-blue.svg" alt="MIT license"></a>
 
 > [!WARNING]
-> This integration is in Beta
+> This integration example is in Beta
 
-# Fingerprint Pro Fastly Proxy Integration
+# Fingerprint Pro Fastly Proxy Integration Example
 
 [Fingerprint](https://fingerprint.com) is a device intelligence platform offering 99.5% accurate visitor identification.
 
-Fingerprint Fastly Proxy Integration is responsible for proxying identification and agent-download requests between your application and Fingerprint through your Fastly infrastructure. The integration uses [Fastly Compute services](https://www.fastly.com/products/compute).
+Fingerprint Fastly Proxy Integration is responsible for proxying identification and agent-download requests between your application and Fingerprint through your Fastly infrastructure. This example uses [Fastly Compute services](https://www.fastly.com/products/compute).
 
 ## 🚧 Requirements and expectations
 
