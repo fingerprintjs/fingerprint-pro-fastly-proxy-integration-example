@@ -10,7 +10,7 @@
 <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/:license-mit-blue.svg" alt="MIT license"></a>
 
 > [!WARNING]
-> This integration example is in Beta
+> This is an example of a custom Fingerprint proxy integration with Fastly. The example is still in the Beta stage of development. Support is provided only to specific customers.
 
 # Fingerprint Pro Fastly Proxy Integration Example
 
@@ -20,7 +20,7 @@ Fingerprint Fastly Proxy Integration is responsible for proxying identification 
 
 ## 🚧 Requirements and expectations
 
-* **Integration in Beta**: Please report any issues to our support team.
+* **Integration example in Beta**: Please report any issues to our support team.
 
 * **Limited to Enterprise plan**: The Fastly Proxy Integration is accessible and exclusively supported for customers on the **Enterprise** Plan. Other customers are encouraged to use [Custom subdomain setup](https://dev.fingerprint.com/docs/custom-subdomain-setup) or [Cloudflare Proxy Integration](https://dev.fingerprint.com/docs/cloudflare-integration).
 
