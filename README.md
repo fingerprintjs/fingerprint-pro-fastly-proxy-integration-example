@@ -10,19 +10,19 @@
 <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/:license-mit-blue.svg" alt="MIT license"></a>
 
 > [!WARNING]
-> This is an example of a custom Fingerprint proxy integration with Fastly. The example is still in the Beta stage of development. Support is provided only to specific customers.
+> This is an example of a custom Fingerprint proxy integration with Fastly. The example is still in the **BETA** stage of development and support is provided only to specific Enterprise customers. If that is not you, do not use this example in production.
 
 # Fingerprint Pro Fastly Proxy Integration Example
 
 [Fingerprint](https://fingerprint.com) is a device intelligence platform offering 99.5% accurate visitor identification.
 
-Fingerprint Fastly Proxy Integration is responsible for proxying identification and agent-download requests between your application and Fingerprint through your Fastly infrastructure. This example uses [Fastly Compute services](https://www.fastly.com/products/compute).
+This custom Fastly Proxy Integration example is responsible for proxying identification and agent-download requests between your application and Fingerprint through your Fastly infrastructure. This example uses [Fastly Compute services](https://www.fastly.com/products/compute).
 
 ## 🚧 Requirements and expectations
 
 * **Integration example in Beta**: Please report any issues to our support team.
 
-* **Limited to Enterprise plan**: The Fastly Proxy Integration is accessible and exclusively supported for customers on the **Enterprise** Plan. Other customers are encouraged to use [Custom subdomain setup](https://dev.fingerprint.com/docs/custom-subdomain-setup) or [Cloudflare Proxy Integration](https://dev.fingerprint.com/docs/cloudflare-integration).
+* **Limited to specific Enterprise customers**: At this point, this custom integration example is accessible and exclusively supported for specific customers on the  **Enterprise** Plan. Other customers are encouraged to use [Custom subdomain setup](https://dev.fingerprint.com/docs/custom-subdomain-setup) or [Cloudflare Proxy Integration](https://dev.fingerprint.com/docs/cloudflare-integration).
 
 * **Manual updates occasionally required**: The underlying data contract in the identification logic can change to keep up with browser updates. Using the Fastly Proxy Integration might require occasional manual updates on your side. Ignoring these updates will lead to lower accuracy or service disruption.
 
