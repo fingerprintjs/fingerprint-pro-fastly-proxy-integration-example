@@ -92,7 +92,7 @@ async function makeIngressRequest(
     const data = await unsealData(json.sealedResult, decryptionKey)
     if(data?.products?.identification?.data) {
       // Example use-case: store unsealed data in KV store
-      const store = new KVStore('identification')
+      const store = new KVStore('FingerprintResults')
       await store.put(data.products.identification.data.requestId, JSON.stringify(data))
 
       // Read stored entry
