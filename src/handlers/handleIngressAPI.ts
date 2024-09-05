@@ -62,7 +62,7 @@ async function makeIngressRequest(
   env: IntegrationEnv,
 ) {
   // Get decryption key from secret store
-  const secretStore = new SecretStore('identificationSecret')
+  const secretStore = new SecretStore('FingerprintSecrets')
   const decryptionKey = await secretStore.get('decryptionKey').then(v => v?.plaintext())
   if(!decryptionKey) {
     throw new Error('Decryption key not found in secret store')
