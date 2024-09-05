@@ -6,15 +6,22 @@
   },
   "devDependencies": {
     "@types/cookie": "^0.6.0",
+    "@types/crypto-js": "^4.2.2",
+    "@types/pako": "^2.0.3",
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "@fastly/js-compute": "^3.7.0",
-    "cookie": "0.5.0"
+    "@fastly/js-compute": "^3.19.0",
+    "@fingerprintjs/fingerprintjs-pro-server-api": "^4.1.2",
+    "@noble/ciphers": "^0.5.3",
+    "cookie": "0.5.0",
+    "pako": "^2.1.0"
   },
   "scripts": {
     "prebuild": "tsc",
     "build": "js-compute-runtime build/index.js bin/main.wasm",
+    "prewebpack": "webpack",
+    "webpack": "js-compute-runtime bin/index.js bin/main.wasm",
     "deploy": "fastly compute publish",
     "dev": "fastly compute serve"
   }
