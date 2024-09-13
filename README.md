@@ -60,7 +60,7 @@ You will use the secret to authenticate requests from your proxy integration to 
 
 1. Run `git clone git@github.com:fingerprintjs/fingerprint-pro-fastly-proxy-integration-example.git`
 2. Run `cd fingerprint-pro-fastly-proxy-integration-example`
-3. Run `yarn install`
+3. Run `pnpm install`
 4. Inside the `fastly.toml` file, add your email to the `authors` field. 
 
     ```diff
@@ -70,7 +70,7 @@ You will use the secret to authenticate requests from your proxy integration to 
 
 ### 5. Deploy the service
 
-1. Run `yarn deploy`.
+1. Run `pnpm deploy`.
 2. Type `y` to create a new service.
 3. You can keep `fingerprint-pro-fastly-proxy-integration` as the service name.
 4. Skip through the rest of the prompts by pressing `Enter`.

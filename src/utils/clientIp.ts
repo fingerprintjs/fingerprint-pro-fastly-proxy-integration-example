@@ -1,9 +1,9 @@
 let clientIp = ''
 
 export function setClientIp(ip: string) {
-    clientIp = ip
+  clientIp = ip
 }
 
 export function getClientIp(): string {
-    return clientIp
+  return clientIp
 }

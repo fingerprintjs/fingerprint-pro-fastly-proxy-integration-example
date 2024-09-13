@@ -3,4 +3,6 @@
 /build
 /pkg
 .idea/
-
+/coverage
+.DS_Store
+.vscode/
