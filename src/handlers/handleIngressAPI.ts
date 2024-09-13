@@ -1,17 +1,16 @@
-import {IntegrationEnv} from '../env'
+import { IntegrationEnv } from '../env'
 import {
   addProxyIntegrationHeaders,
   addTrafficMonitoringSearchParamsForVisitorIdRequest,
   createErrorResponseForIngress,
   createFallbackErrorResponse,
 } from '../utils'
-import {getFilteredCookies} from "../utils/cookie";
-import {inflateRaw} from "pako";
-import {gcm} from "@noble/ciphers/aes";
-import {KVStore} from 'fastly:kv-store'
-import {SecretStore} from 'fastly:secret-store'
-import {EventResponse} from "@fingerprintjs/fingerprintjs-pro-server-api";
-
+import { getFilteredCookies } from '../utils/cookie'
+import { inflateRaw } from 'pako'
+import { gcm } from '@noble/ciphers/aes'
+import { KVStore } from 'fastly:kv-store'
+import { SecretStore } from 'fastly:secret-store'
+import { EventResponse } from '@fingerprintjs/fingerprintjs-pro-server-api'
 
 // Utility function that converts base64 string to Uint8Array
 function base64StrToUint8Array(str: string) {
@@ -40,10 +39,9 @@ function decrypt(sealedData: Uint8Array, decryptionKey: Uint8Array) {
   return new TextDecoder().decode(decompressed)
 }
 
-
 async function unsealData(rawSealedData: string, rawKey: string): Promise<EventResponse | null> {
   try {
-    const sealedData = base64StrToUint8Array(rawSealedData);
+    const sealedData = base64StrToUint8Array(rawSealedData)
     const key = base64StrToUint8Array(rawKey)
 
     const result = decrypt(sealedData, key)
@@ -56,15 +54,11 @@ async function unsealData(rawSealedData: string, rawKey: string): Promise<EventR
   }
 }
 
-
-async function makeIngressRequest(
-  receivedRequest: Request,
-  env: IntegrationEnv,
-) {
+async function makeIngressRequest(receivedRequest: Request, env: IntegrationEnv) {
   // Get decryption key from secret store
   const secretStore = new SecretStore('FingerprintSecrets')
-  const decryptionKey = await secretStore.get('decryptionKey').then(v => v?.plaintext())
-  if(!decryptionKey) {
+  const decryptionKey = await secretStore.get('decryptionKey').then((v) => v?.plaintext())
+  if (!decryptionKey) {
     throw new Error('Decryption key not found in secret store')
   }
 
@@ -84,20 +78,20 @@ async function makeIngressRequest(
   console.log(`sending ingress request to ${url.toString()}...`)
 
   try {
-    const response = await fetch(request, {backend: 'fpjs'})
+    const response = await fetch(request, { backend: 'fpjs' })
     // Parse the open response
     const text = await response.text()
     const json = JSON.parse(text)
 
     const data = await unsealData(json.sealedResult, decryptionKey)
-    if(data?.products?.identification?.data) {
+    if (data?.products?.identification?.data) {
       // Example use-case: store unsealed data in KV store
       const store = new KVStore('FingerprintResults')
       await store.put(data.products.identification.data.requestId, JSON.stringify(data))
 
       // Read stored entry
       const entry = await store.get(data.products.identification.data.requestId)
-      if(entry) {
+      if (entry) {
         console.log('kv store entry', await entry.json())
       }
 
@@ -127,10 +121,14 @@ function makeCacheEndpointRequest(receivedRequest: Request, routeMatches: RegExp
   request.headers.delete('Cookie')
 
   console.log(`sending cache request to ${url}...`)
-  return fetch(request, {backend: 'fpjs'})
+  return fetch(request, { backend: 'fpjs' })
 }
 
-export async function handleIngressAPI(request: Request, env: IntegrationEnv, routeMatches: RegExpMatchArray | undefined) {
+export async function handleIngressAPI(
+  request: Request,
+  env: IntegrationEnv,
+  routeMatches: RegExpMatchArray | undefined
+) {
   if (request.method === 'GET') {
     try {
       return await makeCacheEndpointRequest(request, routeMatches)

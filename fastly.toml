@@ -10,8 +10,8 @@ name = "fingerprint-pro-fastly-proxy-integration"
 service_id = ""
 
 [scripts]
-  build = "yarn build"
-  post_init = "yarn install"
+  build = "pnpm build"
+  post_init = "pnpm install"
 
 #[local_server]
 #  [local_server.backends]

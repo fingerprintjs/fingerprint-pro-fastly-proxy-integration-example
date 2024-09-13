@@ -1,36 +1,36 @@
 import {
-    IntegrationEnv,
-    isScriptDownloadPathSet,
-    isGetResultPathSet,
-    isProxySecretSet,
-    agentScriptDownloadPathVarName,
-    getResultPathVarName,
-    proxySecretVarName,
+  IntegrationEnv,
+  isScriptDownloadPathSet,
+  isGetResultPathSet,
+  isProxySecretSet,
+  agentScriptDownloadPathVarName,
+  getResultPathVarName,
+  proxySecretVarName,
 } from '../env'
 import packageJson from '../../package.json'
 
 function generateNonce() {
-    let result = ''
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-    const indices = crypto.getRandomValues(new Uint8Array(24))
-    for (const index of indices) {
-        result += characters[index % characters.length]
-    }
-    return btoa(result)
+  let result = ''
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+  const indices = crypto.getRandomValues(new Uint8Array(24))
+  for (const index of indices) {
+    result += characters[index % characters.length]
+  }
+  return btoa(result)
 }
 
 function buildHeaders(styleNonce: string): Headers {
-    const headers = new Headers()
-    headers.append('Content-Type', 'text/html')
-    headers.append(
-        'Content-Security-Policy',
-        `default-src 'none'; img-src https://fingerprint.com; style-src 'nonce-${styleNonce}'`,
-    )
-    return headers
+  const headers = new Headers()
+  headers.append('Content-Type', 'text/html')
+  headers.append(
+    'Content-Security-Policy',
+    `default-src 'none'; img-src https://fingerprint.com; style-src 'nonce-${styleNonce}'`
+  )
+  return headers
 }
 
 function createVersionElement(): string {
-    return `
+  return `
   <span>
   ℹ️ Integration version: ${packageJson.version}
   </span>
@@ -38,7 +38,7 @@ function createVersionElement(): string {
 }
 
 function createContactInformationElement(): string {
-    return `
+  return `
   <span>
   ❓Please reach out our support via <a href='mailto:support@fingerprint.com'>support@fingerprint.com</a> if you have any issues
   </span>
@@ -46,51 +46,51 @@ function createContactInformationElement(): string {
 }
 
 function createEnvVarsInformationElement(env: IntegrationEnv): string {
-    const isScriptDownloadPathAvailable = isScriptDownloadPathSet(env)
-    const isGetResultPathAvailable = isGetResultPathSet(env)
-    const isProxySecretAvailable = isProxySecretSet(env)
-    const isAllVarsAvailable = isScriptDownloadPathAvailable && isGetResultPathAvailable && isProxySecretAvailable
+  const isScriptDownloadPathAvailable = isScriptDownloadPathSet(env)
+  const isGetResultPathAvailable = isGetResultPathSet(env)
+  const isProxySecretAvailable = isProxySecretSet(env)
+  const isAllVarsAvailable = isScriptDownloadPathAvailable && isGetResultPathAvailable && isProxySecretAvailable
 
-    let result = ''
-    if (!isAllVarsAvailable) {
-        result += `
+  let result = ''
+  if (!isAllVarsAvailable) {
+    result += `
     <span>
     The following environment variables are not defined. Please reach out our support team.
     </span>
     `
-        if (!isScriptDownloadPathAvailable) {
-            result += `
+    if (!isScriptDownloadPathAvailable) {
+      result += `
       <span>
       ⚠️ <strong>${agentScriptDownloadPathVarName} </strong> is not set
       </span>
       `
-        }
-        if (!isGetResultPathAvailable) {
-            result += `
+    }
+    if (!isGetResultPathAvailable) {
+      result += `
       <span>
       ⚠️ <strong>${getResultPathVarName} </strong> is not set
       </span>
       `
-        }
-        if (!isProxySecretAvailable) {
-            result += `
+    }
+    if (!isProxySecretAvailable) {
+      result += `
       <span>
       ⚠️ <strong>${proxySecretVarName} </strong> is not set
       </span>
       `
-        }
-    } else {
-        result += `
+    }
+  } else {
+    result += `
     <span>
      ✅ All environment variables are set
     </span>
     `
-    }
-    return result
+  }
+  return result
 }
 
 function buildBody(env: IntegrationEnv, styleNonce: string): string {
-    let body = `
+  let body = `
   <html lang='en-US'>
   <head>
     <meta charset='utf-8'/>
@@ -109,31 +109,31 @@ function buildBody(env: IntegrationEnv, styleNonce: string): string {
     <h1>Fingerprint Pro Fastly Integration</h1>
   `
 
-    body += `<span>🎉 Your Fastly Integration is deployed</span>`
+  body += `<span>🎉 Your Fastly Integration is deployed</span>`
 
-    body += createVersionElement()
-    body += createEnvVarsInformationElement(env)
-    body += createContactInformationElement()
+  body += createVersionElement()
+  body += createEnvVarsInformationElement(env)
+  body += createContactInformationElement()
 
-    body += `  
+  body += `  
   </body>
   </html>
   `
-    return body
+  return body
 }
 
 export function handleStatusPage(request: Request, env: IntegrationEnv): Response {
-    if (request.method !== 'GET') {
-        return new Response(null, { status: 405 })
-    }
+  if (request.method !== 'GET') {
+    return new Response(null, { status: 405 })
+  }
 
-    const styleNonce = generateNonce()
-    const headers = buildHeaders(styleNonce)
-    const body = buildBody(env, styleNonce)
+  const styleNonce = generateNonce()
+  const headers = buildHeaders(styleNonce)
+  const body = buildBody(env, styleNonce)
 
-    return new Response(body, {
-        status: 200,
-        statusText: 'OK',
-        headers,
-    })
+  return new Response(body, {
+    status: 200,
+    statusText: 'OK',
+    headers,
+  })
 }
