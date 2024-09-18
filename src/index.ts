@@ -31,8 +31,7 @@ function getEnvObject(): IntegrationEnv {
       AGENT_SCRIPT_DOWNLOAD_PATH: null,
       GET_RESULT_PATH: null,
       PROXY_SECRET: null,
-      FPJS_CDN_URL: null,
-      FPJS_INGRESS_BASE_HOST: null,
+      OPEN_CLIENT_RESPONSE_ENABLED: 'false',
     }
   }
 
@@ -40,7 +39,6 @@ function getEnvObject(): IntegrationEnv {
     AGENT_SCRIPT_DOWNLOAD_PATH: config.get('AGENT_SCRIPT_DOWNLOAD_PATH'),
     GET_RESULT_PATH: config.get('GET_RESULT_PATH'),
     PROXY_SECRET: config.get('PROXY_SECRET'),
-    FPJS_CDN_URL: config.get('FPJS_CDN_URL'),
-    FPJS_INGRESS_BASE_HOST: config.get('FPJS_INGRESS_BASE_HOST'),
+    OPEN_CLIENT_RESPONSE_ENABLED: config.get('OPEN_CLIENT_RESPONSE_ENABLED'),
   }
 }

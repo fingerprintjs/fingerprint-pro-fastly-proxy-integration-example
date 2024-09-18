@@ -1,4 +1,4 @@
-import { IntegrationEnv } from '../env'
+import { IntegrationEnv, isOpenClientResponseEnabled } from '../env'
 import {
   addProxyIntegrationHeaders,
   addTrafficMonitoringSearchParamsForVisitorIdRequest,
@@ -8,6 +8,7 @@ import {
 import { getFilteredCookies } from '../utils/cookie'
 import { SecretStore } from 'fastly:secret-store'
 import { unsealData } from '../utils/unsealData'
+import { processUnsealedResult } from '../utils/processUnsealedResult'
 
 async function makeIngressRequest(receivedRequest: Request, env: IntegrationEnv) {
   // Get decryption key from secret store
@@ -32,23 +33,27 @@ async function makeIngressRequest(receivedRequest: Request, env: IntegrationEnv)
 
   console.log(`sending ingress request to ${url.toString()}...`)
 
-  try {
-    const response = await fetch(request, { backend: 'fpjs' })
+  if (isOpenClientResponseEnabled(env)) {
+    try {
+      const response = await fetch(request, { backend: 'fpjs' })
 
-    // Parse the open response
-    const text = await response.text()
-    const json = JSON.parse(text)
-    const data = await unsealData(json.sealedResult, decryptionKey)
+      // Parse the open response
+      const text = await response.text()
+      const data = await unsealData(JSON.parse(text).sealedResult, decryptionKey)
+      void processUnsealedResult(data) // void means skip awaiting this and handle it in the background
 
-    return new Response(JSON.stringify(data), {
-      headers: response.headers,
-      status: response.status,
-      statusText: response.statusText,
-    })
-  } catch (e) {
-    console.error('ingress request failed', e)
-    throw e
+      return new Response(text, {
+        headers: response.headers,
+        status: response.status,
+        statusText: response.statusText,
+      })
+    } catch (e) {
+      console.error('ingress request failed', e)
+      throw e
+    }
   }
+
+  return fetch(request, { backend: 'fpjs' })
 }
 
 function makeCacheEndpointRequest(receivedRequest: Request, routeMatches: RegExpMatchArray | undefined) {

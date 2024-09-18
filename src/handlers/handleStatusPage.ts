@@ -6,6 +6,8 @@ import {
   agentScriptDownloadPathVarName,
   getResultPathVarName,
   proxySecretVarName,
+  isOpenClientResponseSet,
+  openClientResponseVarName,
 } from '../env'
 import packageJson from '../../package.json'
 
@@ -49,7 +51,9 @@ function createEnvVarsInformationElement(env: IntegrationEnv): string {
   const isScriptDownloadPathAvailable = isScriptDownloadPathSet(env)
   const isGetResultPathAvailable = isGetResultPathSet(env)
   const isProxySecretAvailable = isProxySecretSet(env)
-  const isAllVarsAvailable = isScriptDownloadPathAvailable && isGetResultPathAvailable && isProxySecretAvailable
+  const isSealedResultsAvailable = isOpenClientResponseSet(env)
+  const isAllVarsAvailable =
+    isScriptDownloadPathAvailable && isGetResultPathAvailable && isProxySecretAvailable && isSealedResultsAvailable
 
   let result = ''
   if (!isAllVarsAvailable) {
@@ -76,6 +80,14 @@ function createEnvVarsInformationElement(env: IntegrationEnv): string {
       result += `
       <span>
       ⚠️ <strong>${proxySecretVarName} </strong> is not set
+      </span>
+      `
+    }
+
+    if (!isSealedResultsAvailable) {
+      result += `
+      <span>
+      ⚠️ <strong>${openClientResponseVarName} </strong> is not set
       </span>
       `
     }
