@@ -51,9 +51,9 @@ function createEnvVarsInformationElement(env: IntegrationEnv): string {
   const isScriptDownloadPathAvailable = isScriptDownloadPathSet(env)
   const isGetResultPathAvailable = isGetResultPathSet(env)
   const isProxySecretAvailable = isProxySecretSet(env)
-  const isSealedResultsAvailable = isOpenClientResponseSet(env)
+  const isOpenClientResponseEnabled = isOpenClientResponseSet(env)
   const isAllVarsAvailable =
-    isScriptDownloadPathAvailable && isGetResultPathAvailable && isProxySecretAvailable && isSealedResultsAvailable
+    isScriptDownloadPathAvailable && isGetResultPathAvailable && isProxySecretAvailable && isOpenClientResponseEnabled
 
   let result = ''
   if (!isAllVarsAvailable) {
@@ -84,7 +84,7 @@ function createEnvVarsInformationElement(env: IntegrationEnv): string {
       `
     }
 
-    if (!isSealedResultsAvailable) {
+    if (!isOpenClientResponseEnabled) {
       result += `
       <span>
       ⚠️ <strong>${openClientResponseVarName} </strong> is not set
