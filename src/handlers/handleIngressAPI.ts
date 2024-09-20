@@ -40,7 +40,7 @@ async function makeIngressRequest(receivedRequest: Request, env: IntegrationEnv)
       // Parse the open response
       const text = await response.text()
       const data = await unsealData(JSON.parse(text).sealedResult, decryptionKey)
-      void processUnsealedResult(data) // void means skip awaiting this and handle it in the background
+      await processUnsealedResult(data) // void means skip awaiting this and handle it in the background
 
       return new Response(text, {
         headers: response.headers,
