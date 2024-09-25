@@ -7,13 +7,14 @@
     "moduleResolution": "node",
     "esModuleInterop": true,
     "lib": [ "es2022" ],
-    "rootDir": "src",
+    "rootDir": ".",
     "outDir": "./build",
     "skipLibCheck": true,
     "resolveJsonModule": true
   },
   "include": [
-    "./src/index.ts"
+    "./src/**/*.ts",
+    "./test/**/*.ts"
   ],
   "exclude": [
     "node_modules"

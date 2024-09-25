@@ -7,7 +7,7 @@ import { createFallbackErrorResponse } from './utils'
 
 addEventListener('fetch', (event) => event.respondWith(handleRequest(event)))
 
-async function handleRequest(event: FetchEvent): Promise<Response> {
+export async function handleRequest(event: FetchEvent): Promise<Response> {
   try {
     const request = event.request
     const envObj = getEnvObject()
