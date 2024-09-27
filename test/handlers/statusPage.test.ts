@@ -75,4 +75,11 @@ describe('Status Page', () => {
     const versionMatch = matches ? matches[1] : null
     expect(versionMatch).toBe(version)
   })
+
+  it('should return 405 when method is not get', async () => {
+    const request = makeRequest(new URL('https://test/status'), { method: 'POST' })
+    const response = await handleRequest(request)
+
+    expect(response.status).toBe(405)
+  })
 })
