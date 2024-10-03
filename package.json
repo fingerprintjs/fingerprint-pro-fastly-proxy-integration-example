@@ -1,5 +1,5 @@
 {
-  "version": "0.1.1-23",
+  "version": "0.1.1",
   "engines": {
     "node": ">=20"
   },
@@ -29,7 +29,7 @@
     "cookie": "0.5.0"
   },
   "scripts": {
-    "prebuild": "webpack --config webpack.config.js",
+    "prebuild": "tsc",
     "assemble": "js-compute-runtime build/index.js bin/main.wasm",
     "build": "pnpm run prebuild && pnpm run assemble",
     "deploy": "fastly compute publish",
