@@ -8,6 +8,10 @@ export async function processUnsealedResult(data: EventResponse | null): Promise
 
   const filteredPlugins = plugins.filter((t) => t.type === PluginType.ProcessUnsealedResult)
   for (const filteredPlugin of filteredPlugins) {
-    void filteredPlugin.function(data.products.identification.data.requestId, data)
+    try {
+      await filteredPlugin.function(data.products.identification.data.requestId, data)
+    } catch (e: any) {
+      console.error(`Plugin[${filteredPlugin.name}]`, e)
+    }
   }
 }
