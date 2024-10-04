@@ -23,9 +23,7 @@ function getVarOrDefault(
 
 function isVarSet(variable: keyof IntegrationEnv): (env: IntegrationEnv) => boolean {
   return function (env: IntegrationEnv): boolean {
-    const trimmedValue = env[variable]?.trim()
-    const length = trimmedValue?.length ?? 0
-    return length > 0
+    return Boolean(env[variable]?.trim())
   }
 }
 
