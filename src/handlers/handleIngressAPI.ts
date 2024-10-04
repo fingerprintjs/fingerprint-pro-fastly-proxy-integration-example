@@ -33,25 +33,27 @@ async function makeIngressRequest(receivedRequest: Request, env: IntegrationEnv)
 
   console.log(`sending ingress request to ${url.toString()}...`)
 
-  if (isOpenClientResponseEnabled(env)) {
-    try {
-      const response = await fetch(request, { backend: 'fpjs' })
+if (!isOpenClientResponseEnabled(env)) {
+  return fetch(request, { backend: 'fpjs' })
+}
 
-      // Parse the open response
-      const text = await response.text()
-      const data = await unsealData(JSON.parse(text).sealedResult, decryptionKey)
-      void processUnsealedResult(data) // void means skip awaiting this and handle it in the background
+try {
+  const response = await fetch(request, {backend: 'fpjs'})
 
-      return new Response(text, {
-        headers: response.headers,
-        status: response.status,
-        statusText: response.statusText,
-      })
-    } catch (e) {
-      console.error('ingress request failed', e)
-      throw e
-    }
-  }
+  // Parse the open response
+  const text = await response.text()
+  const data = await unsealData(JSON.parse(text).sealedResult, decryptionKey)
+  void processUnsealedResult(data) // void means skip awaiting this and handle it in the background
+
+  return new Response(text, {
+    headers: response.headers,
+    status: response.status,
+    statusText: response.statusText,
+  })
+} catch (e) {
+  console.error('ingress request failed', e)
+  throw e
+}
 
   return fetch(request, { backend: 'fpjs' })
 }
