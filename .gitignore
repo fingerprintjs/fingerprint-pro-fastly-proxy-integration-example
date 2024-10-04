@@ -6,4 +6,3 @@
 /coverage
 .DS_Store
 .vscode/
-plugins/*/*/options.json
