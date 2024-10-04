@@ -23,7 +23,7 @@ async function makeIngressRequest(receivedRequest: Request, env: IntegrationEnv)
   addTrafficMonitoringSearchParamsForVisitorIdRequest(url)
   const oldCookieValue = receivedRequest.headers.get('cookie')
   const newCookieValue = getFilteredCookies(oldCookieValue, (key) => key === '_iidt')
-  const request = new Request(url, receivedRequest as any)
+  const request = new Request(url, receivedRequest)
   if (newCookieValue) {
     request.headers.set('cookie', newCookieValue)
   } else {
@@ -61,7 +61,7 @@ function makeCacheEndpointRequest(receivedRequest: Request, routeMatches: RegExp
   const pathname = routeMatches ? routeMatches[1] : undefined
   url.pathname = pathname ?? ''
 
-  const request = new Request(url, receivedRequest as any)
+  const request = new Request(url, receivedRequest)
   request.headers.delete('Cookie')
 
   console.log(`sending cache request to ${url}...`)
