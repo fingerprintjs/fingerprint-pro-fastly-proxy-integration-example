@@ -12,6 +12,9 @@ const Defaults: IntegrationEnv = {
   OPEN_CLIENT_RESPONSE_ENABLED: 'false',
 }
 
+export const FingerprintSecretStoreName = 'FingerprintSecrets'
+export const FingerprintDecryptionKeyName = 'decryptionKey'
+
 function getVarOrDefault(
   variable: keyof IntegrationEnv,
   defaults: IntegrationEnv

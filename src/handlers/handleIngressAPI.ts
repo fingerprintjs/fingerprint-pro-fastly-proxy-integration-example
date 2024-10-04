@@ -1,4 +1,9 @@
-import { IntegrationEnv, isOpenClientResponseEnabled } from '../env'
+import {
+  FingerprintDecryptionKeyName,
+  FingerprintSecretStoreName,
+  IntegrationEnv,
+  isOpenClientResponseEnabled,
+} from '../env'
 import {
   addProxyIntegrationHeaders,
   addTrafficMonitoringSearchParamsForVisitorIdRequest,
@@ -12,8 +17,8 @@ import { processUnsealedResult } from '../utils/processUnsealedResult'
 
 async function makeIngressRequest(receivedRequest: Request, env: IntegrationEnv) {
   // Get decryption key from secret store
-  const secretStore = new SecretStore('FingerprintSecrets')
-  const decryptionKey = await secretStore.get('decryptionKey').then((v) => v?.plaintext())
+  const secretStore = new SecretStore(FingerprintSecretStoreName)
+  const decryptionKey = await secretStore.get(FingerprintDecryptionKeyName).then((v) => v?.plaintext())
   if (!decryptionKey) {
     throw new Error('Decryption key not found in secret store')
   }
