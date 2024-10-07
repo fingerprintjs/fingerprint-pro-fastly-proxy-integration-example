@@ -16,13 +16,6 @@ import { unsealData } from '../utils/unsealData'
 import { processUnsealedResult } from '../utils/processUnsealedResult'
 
 async function makeIngressRequest(receivedRequest: Request, env: IntegrationEnv) {
-  // Get decryption key from secret store
-  const secretStore = new SecretStore(FingerprintSecretStoreName)
-  const decryptionKey = await secretStore.get(FingerprintDecryptionKeyName).then((v) => v?.plaintext())
-  if (!decryptionKey) {
-    throw new Error('Decryption key not found in secret store')
-  }
-
   const url = new URL(receivedRequest.url)
   url.pathname = ''
   addTrafficMonitoringSearchParamsForVisitorIdRequest(url)
@@ -42,6 +35,12 @@ async function makeIngressRequest(receivedRequest: Request, env: IntegrationEnv)
     return fetch(request, { backend: 'fpjs' })
   }
 
+  const secretStore = new SecretStore(FingerprintSecretStoreName)
+  const decryptionKey = await secretStore.get(FingerprintDecryptionKeyName).then((v) => v?.plaintext())
+  if (!decryptionKey) {
+    throw new Error('Decryption key not found in secret store')
+  }
+
   try {
     const response = await fetch(request, { backend: 'fpjs' })
 
@@ -59,8 +58,6 @@ async function makeIngressRequest(receivedRequest: Request, env: IntegrationEnv)
     console.error('ingress request failed', e)
     throw e
   }
-
-  return fetch(request, { backend: 'fpjs' })
 }
 
 function makeCacheEndpointRequest(receivedRequest: Request, routeMatches: RegExpMatchArray | undefined) {
