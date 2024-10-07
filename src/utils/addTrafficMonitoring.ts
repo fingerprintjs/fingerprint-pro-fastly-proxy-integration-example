@@ -3,7 +3,7 @@ const INT_VERSION = packageJson.version
 const PARAM_NAME = 'ii'
 
 function getTrafficMonitoringValue(type: 'procdn' | 'ingress'): string {
-  return `fingerprintjs-pro-fastly/${INT_VERSION}/${type}`
+  return `fingerprint-pro-fastly-compute/${INT_VERSION}/${type}`
 }
 
 export function addTrafficMonitoringSearchParamsForProCDN(url: URL) {
