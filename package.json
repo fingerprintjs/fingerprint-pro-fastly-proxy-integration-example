@@ -46,7 +46,8 @@
     "lint": "eslint --ext .js,.ts,.mjs --ignore-path .gitignore --max-warnings 0 src/",
     "lint:fix": "pnpm lint --fix",
     "test": "jest --config jest.config.js",
-    "test:coverage": "jest --coverage --config jest.config.js"
+    "test:coverage": "jest --coverage --config jest.config.js",
+    "test:dts": "echo \"No type tests introduced\" && exit 0"
   },
   "lint-staged": {
     "*.{js,ts,mjs}": "pnpm lint:fix"
