@@ -1,0 +1,96 @@
+import { createClient } from '../utils/createClient'
+import { activateVersion } from './activateVersion'
+import { deployPackage } from './deployPackage'
+
+export async function createService(domain: string) {
+  const client = createClient('service')
+  try {
+    const searchResponse = await client.searchService({ name: domain })
+    if (searchResponse && searchResponse.id) {
+      return client.getServiceDetail({ service_id: searchResponse.id })
+    }
+  } catch (_) {
+    console.log(`Couldn't find service with name: ${domain}`)
+  }
+  console.log('Creating service', domain)
+  const createResponse = await client.createService({
+    name: domain,
+    type: 'wasm',
+  })
+  await createDomain(domain, createResponse.id)
+  await createOrigin(createResponse.id)
+  const configStore = await createConfigStore()
+  console.log('config store created')
+  console.log('linking config store')
+  await linkConfigStore(createResponse.id, 1, configStore.id)
+  console.log('config store linked')
+  await deployPackage(createResponse.id, 1)
+  await activateVersion(createResponse.id, 1)
+  console.log('Version activated, Service created!')
+  return client.getServiceDetail({ service_id: createResponse.id })
+}
+
+async function createOrigin(serviceId: string) {
+  console.log('Creating default origin')
+  const client = createClient('backend')
+  await client.createBackend({
+    service_id: serviceId,
+    version_id: 1,
+    address: process.env.DEFAULT_ORIGIN,
+    name: 'default-backend',
+    port: 443,
+  })
+  console.log('Default origin created')
+}
+
+async function createDomain(domain: string, serviceId: string) {
+  console.log('Creating domain', domain)
+  const domainClient = createClient('domain')
+  await domainClient.createDomain({
+    version_id: 1,
+    name: domain,
+    service_id: serviceId,
+  })
+  console.log('Domain created')
+}
+
+async function linkConfigStore(service_id: string, version_id: number, resource_id: string) {
+  return createClient('resource').createResource({
+    service_id,
+    version_id,
+    resource_id,
+    name: `${service_id}-config-store-link-${resource_id}`,
+  })
+}
+
+async function createConfigStore() {
+  console.log('Creating config store')
+  const configStoreClient = createClient('configStore')
+  const configStoreItemClient = createClient('configStoreItem')
+  let configStore
+  try {
+    configStore = await configStoreClient.createConfigStore({
+      name: process.env.CONFIG_STORE_NAME ?? 'Fingerprint',
+    })
+  } catch (_) {
+    const stores = await configStoreClient.listConfigStores()
+    return stores.find((t: any) => t.name === 'Fingerprint')
+  }
+  await configStoreItemClient.createConfigStoreItem({
+    config_store_id: configStore.id,
+    item_key: 'GET_RESULT_PATH',
+    item_value: process.env.GET_RESULT_PATH ?? 'result',
+  })
+  await configStoreItemClient.createConfigStoreItem({
+    config_store_id: configStore.id,
+    item_key: 'AGENT_SCRIPT_DOWNLOAD_PATH',
+    item_value: process.env.AGENT_SCRIPT_DOWNLOAD_PATH ?? 'agent',
+  })
+  await configStoreItemClient.createConfigStoreItem({
+    config_store_id: configStore.id,
+    item_key: 'PROXY_SECRET',
+    item_value: 'secret',
+  })
+
+  return configStore
+}
