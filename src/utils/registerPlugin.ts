@@ -1,17 +1,17 @@
-import { EventResponse } from '@fingerprintjs/fingerprintjs-pro-server-api'
+import { ProcessOpenClientResponseContext } from './processOpenClientResponse'
 
-export type ProcessUnsealedDataPluginFunction = (requestId: string, data: EventResponse | null) => void | Promise<void>
+export type ProcessUnsealedDataPluginFunction = (context: ProcessOpenClientResponseContext) => void | Promise<void>
 export enum PluginType {
-  ProcessUnsealedResult = 'processUnsealedResult',
+  ProcessOpenClientResponse = 'processOpenClientResponse',
 }
 
-export type ProcessUnsealedResultPlugin = {
+export type ProcessOpenClientResponsePlugin = {
   name: string
-  type: PluginType.ProcessUnsealedResult
+  type: PluginType.ProcessOpenClientResponse
   function: ProcessUnsealedDataPluginFunction
 }
 
-export type Plugin = ProcessUnsealedResultPlugin // This type will be union of types if more plugin/hook types gets introduced
+export type Plugin = ProcessOpenClientResponsePlugin // This type will be union of types if more plugin/hook types gets introduced
 export const plugins: Plugin[] = []
 
 export function registerPlugin(plugin: Plugin) {

@@ -13,7 +13,7 @@ import {
 import { getFilteredCookies } from '../utils/cookie'
 import { SecretStore } from 'fastly:secret-store'
 import { unsealData } from '../utils/unsealData'
-import { processUnsealedResult } from '../utils/processUnsealedResult'
+import { processOpenClientResponse } from '../utils/processOpenClientResponse'
 
 async function makeIngressRequest(receivedRequest: Request, env: IntegrationEnv) {
   const url = new URL(receivedRequest.url)
@@ -46,8 +46,8 @@ async function makeIngressRequest(receivedRequest: Request, env: IntegrationEnv)
 
     // Parse the open response
     const text = await response.text()
-    const data = await unsealData(JSON.parse(text).sealedResult, decryptionKey)
-    void processUnsealedResult(data) // void means skip awaiting this and handle it in the background
+    const event = await unsealData(JSON.parse(text).sealedResult, decryptionKey)
+    void processOpenClientResponse({ event, sealedResult: JSON.parse(text).sealedResult }) // void means skip awaiting this and handle it in the background
 
     return new Response(text, {
       headers: response.headers,
