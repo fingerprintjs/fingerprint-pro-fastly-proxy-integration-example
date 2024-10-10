@@ -2,6 +2,8 @@ import { createClient } from '../utils/createClient'
 import { activateVersion } from './activateVersion'
 import { deployPackage } from './deployPackage'
 
+const CONFIG_STORE_NAME = process.env.CONFIG_STORE_NAME ?? 'Fingerprint'
+
 export async function createService(domain: string) {
   const client = createClient('service')
   try {
@@ -18,19 +20,25 @@ export async function createService(domain: string) {
     type: 'wasm',
   })
   await createDomain(domain, createResponse.id)
-  await createOrigin(createResponse.id)
+  await createOrigin(createResponse.id, domain)
   const configStore = await createConfigStore()
   console.log('config store created')
   console.log('linking config store')
   await linkConfigStore(createResponse.id, 1, configStore.id)
   console.log('config store linked')
+  console.log('deploying package')
   await deployPackage(createResponse.id, 1)
+  console.log('package deployed')
+  console.log('configuring backends')
+  await createBackends(createResponse.id, 1)
+  console.log('backends configured')
+  console.log('activating version 1')
   await activateVersion(createResponse.id, 1)
-  console.log('Version activated, Service created!')
+  console.log('Version 1 activated, Service created!')
   return client.getServiceDetail({ service_id: createResponse.id })
 }
 
-async function createOrigin(serviceId: string) {
+async function createOrigin(serviceId: string, domain: string) {
   console.log('Creating default origin')
   const client = createClient('backend')
   await client.createBackend({
@@ -38,7 +46,9 @@ async function createOrigin(serviceId: string) {
     version_id: 1,
     address: process.env.DEFAULT_ORIGIN,
     name: 'default-backend',
-    port: 443,
+    port: 80,
+    override_host: domain,
+    use_ssl: false,
   })
   console.log('Default origin created')
 }
@@ -51,7 +61,11 @@ async function createDomain(domain: string, serviceId: string) {
     name: domain,
     service_id: serviceId,
   })
-  console.log('Domain created')
+  await domainClient.createDomain({
+    version_id: 1,
+    name: `fpjs-fastly-${domain.split('.')[0]}.edgecompute.app`,
+    service_id: serviceId,
+  })
 }
 
 async function linkConfigStore(service_id: string, version_id: number, resource_id: string) {
@@ -70,11 +84,11 @@ async function createConfigStore() {
   let configStore
   try {
     configStore = await configStoreClient.createConfigStore({
-      name: process.env.CONFIG_STORE_NAME ?? 'Fingerprint',
+      name: CONFIG_STORE_NAME,
     })
   } catch (_) {
     const stores = await configStoreClient.listConfigStores()
-    return stores.find((t: any) => t.name === 'Fingerprint')
+    return stores.find((t: any) => t.name === CONFIG_STORE_NAME)
   }
   await configStoreItemClient.createConfigStoreItem({
     config_store_id: configStore.id,
@@ -91,6 +105,29 @@ async function createConfigStore() {
     item_key: 'PROXY_SECRET',
     item_value: 'secret',
   })
+  await configStoreItemClient.createConfigStoreItem({
+    config_store_id: configStore.id,
+    item_key: 'OPEN_CLIENT_RESPONSE_ENABLED',
+    item_value: 'false',
+  })
 
   return configStore
+}
+
+async function createBackends(service_id: string, version_id: number) {
+  const client = createClient('backend')
+  await client.createBackend({
+    service_id,
+    version_id,
+    address: process.env.FPJS_BACKEND_URL ?? 'api.fpjs.io',
+    name: 'fpjs',
+    port: 443,
+  })
+  await client.createBackend({
+    service_id,
+    version_id,
+    address: process.env.FPCDN_BACKEND_URL ?? 'fpcdn.io',
+    name: 'fpcdn',
+    port: 443,
+  })
 }

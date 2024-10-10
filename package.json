@@ -15,12 +15,13 @@
     "@types/cookie": "^0.6.0",
     "@types/jest": "^29.5.12",
     "@types/node": "^22.7.4",
+    "babel-jest": "^29.7.0",
+    "esbuild": "^0.24.0",
     "fastly": "7.3.0",
     "husky": "^9.1.5",
     "jest": "^29.7.0",
-    "ts-node": "^10.9.2",
-    "babel-jest": "^29.7.0",
     "ts-jest": "^29.2.5",
+    "ts-node": "^10.9.2",
     "tslib": "^2.7.0",
     "typescript": "5.3.3"
   },
@@ -29,7 +30,7 @@
     "cookie": "0.5.0"
   },
   "scripts": {
-    "prebuild": "tsc",
+    "prebuild": "node build.js",
     "assemble": "js-compute-runtime build/index.js bin/main.wasm",
     "build": "pnpm run prebuild && pnpm run assemble",
     "deploy": "fastly compute publish",
@@ -38,7 +39,7 @@
     "lint": "eslint --ext .js,.ts,.mjs --ignore-path .gitignore --max-warnings 0 src/",
     "lint:fix": "pnpm lint --fix",
     "ci": "ts-node --transpile-only scripts/ci.ts",
-    "test:mock-e2e": "ts-node scripts/mockTests.ts"
+    "test:mock-e2e": "ts-node scripts/mockTests.ts",
     "test": "jest --config jest.config.js",
     "test:coverage": "jest --coverage --config jest.config.js"
   },
