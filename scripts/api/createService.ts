@@ -11,8 +11,8 @@ export async function createService(domain: string) {
     if (searchResponse && searchResponse.id) {
       return client.getServiceDetail({ service_id: searchResponse.id })
     }
-  } catch (_) {
-    console.log(`Couldn't find service with name: ${domain}`)
+  } catch (e) {
+    console.error(`Couldn't find service with name: ${domain}`, e)
   }
   console.log('Creating service', domain)
   const createResponse = await client.createService({
