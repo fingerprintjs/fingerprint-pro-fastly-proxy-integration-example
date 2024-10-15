@@ -1,30 +1,31 @@
 <p align="center">
-  <a href="https://fingerprint.com">
-    <picture>
-     <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/fingerprintjs/fingerprintjs-pro-cloudflare-worker/main/assets/logo_light.svg" />
-     <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/fingerprintjs/fingerprintjs-pro-cloudflare-worker/main/assets/logo_dark.svg" />
-     <img src="https://raw.githubusercontent.com/fingerprintjs/fingerprintjs-pro-cloudflare-worker/main/assets/logo_dark.svg" alt="Fingerprint logo" width="312px" />
-   </picture>
-  </a>
+<a href="https://fingerprint.com">
+<picture>
+<source media="(prefers-color-scheme: dark)" srcset="https://fingerprintjs.github.io/home/resources/logo_light.svg" />
+<source media="(prefers-color-scheme: light)" srcset="https://fingerprintjs.github.io/home/resources/logo_dark.svg" />
+<img src="https://fingerprintjs.github.io/home/resources/logo_dark.svg" alt="Fingerprint logo" width="312px" />
+</picture>
+</a>
+</p>
 <p align="center">
+<a href="https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration"><img src="https://img.shields.io/github/v/release/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration" alt="Current version"></a>
 <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/:license-mit-blue.svg" alt="MIT license"></a>
+<a href="https://discord.gg/39EpE2neBg"><img src="https://img.shields.io/discord/852099967190433792?style=logo&label=Discord&logo=Discord&logoColor=white" alt="Discord server"></a>
+</p>
 
-> [!CAUTION]
-> This is an example of a custom Fingerprint proxy integration with Fastly. The example is still in the **BETA** stage of development and support is provided only to specific Enterprise customers. If that is not you, do not use this example in production.
-
-# Fingerprint Pro Fastly Proxy Integration Example
+# Fingerprint Pro Fastly Compute@Edge Proxy Integration
 
 [Fingerprint](https://fingerprint.com) is a device intelligence platform offering 99.5% accurate visitor identification.
 
-This custom Fastly Proxy Integration example is responsible for proxying identification and agent-download requests between your application and Fingerprint through your Fastly infrastructure. This example uses [Fastly Compute services](https://www.fastly.com/products/compute).
+This custom Fastly Proxy Integration example is responsible for proxying identification and agent-download requests between your application and Fingerprint through your Fastly infrastructure. This integration uses [Fastly Compute services](https://www.fastly.com/products/compute).
 
 ## 🚧 Requirements and expectations
 
-* **Integration example in Beta**: Please report any issues to our support team.
+* **Integration in Beta**: Please report any issues to our support team.
 
-* **Limited to specific Enterprise customers**: At this point, this custom integration example is accessible and exclusively supported for specific customers on the  **Enterprise** Plan. Other customers are encouraged to use [Custom subdomain setup](https://dev.fingerprint.com/docs/custom-subdomain-setup) or [Cloudflare Proxy Integration](https://dev.fingerprint.com/docs/cloudflare-integration).
+* **Limited to specific Enterprise customers**: At this point, this proxy integration is accessible and exclusively supported for specific customers on the  **Enterprise** Plan. Other customers are encouraged to use [Custom subdomain setup](https://dev.fingerprint.com/docs/custom-subdomain-setup) or [Cloudflare Proxy Integration](https://dev.fingerprint.com/docs/cloudflare-integration).
 
-* **Manual updates occasionally required**: The underlying data contract in the identification logic can change to keep up with browser updates. Using the Fastly Proxy Integration might require occasional manual updates on your side. Ignoring these updates will lead to lower accuracy or service disruption.
+* **Manual updates occasionally required**: The underlying data contract in the identification logic can change to keep up with browser updates. Using the Fastly Compute@Edge Proxy Integration might require occasional manual updates on your side. Ignoring these updates will lead to lower accuracy or service disruption.
 
 ## How to install
 
@@ -58,8 +59,8 @@ You will use the secret to authenticate requests from your proxy integration to 
 
 ### 4. Clone this repository and prepare it for deployment
 
-1. Run `git clone git@github.com:fingerprintjs/fingerprint-pro-fastly-proxy-integration-example.git`
-2. Run `cd fingerprint-pro-fastly-proxy-integration-example`
+1. Run `git clone git@github.com:fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration.git`
+2. Run `cd fingerprint-pro-fastly-compute-proxy-integration`
 3. Run `pnpm install`
 4. Inside the `fastly.toml` file, add your email to the `authors` field. 
 
@@ -112,6 +113,7 @@ Provide the proxy secret and your chosen resource paths to the service.
    - set `AGENT_SCRIPT_DOWNLOAD_PATH` to your chosen agent download path. It should be something random to avoid ad blockers, for example, `463n7-d0wnl04d`.
    - set `GET_RESULT_PATH` to your chosen identification result path. It should be something random to avoid ad blockers, for example, `1d3n71f1c4710n-r35ul7`.
    - set `PROXY_SECRET` to the value of your Fingerprint proxy secret you created in Step 1.
+   - set `OPEN_CLIENT_RESPONSE_ENABLED` to `true` if open client response is enabled in your subscription; otherwise, set it to `false`.
 
 ### 8. Create a domain for the service
 
