@@ -8,32 +8,32 @@ jobs:
     runs-on: ubuntu-20.04
     name: Check changed files
     outputs:
-      CANT_PASS_WITHOUT_TESTS: ${{ steps.decision.outputs.CANT_PASS_WITHOUT_TESTS }}
+      NEED_TO_RUN_TESTS: ${{ steps.decision.outputs.NEED_TO_RUN_TESTS }}
     steps:
-      - id: files
-        uses: jitterbit/get-changed-files@b17fbb00bdc0c0f63fcf166580804b4d2cdc2a42
-      - name: Make decision based on changed files
+      - name: Git clone
+        uses: actions/checkout@v4
+      - name: Get changed files
         id: decision
         run: |
-          cantPassWithoutTests=false
-          for changed_file in ${{ steps.files.outputs.all }}; do
+          git fetch origin $GITHUB_BASE_REF
+          diff=$(git diff --name-only origin/$GITHUB_BASE_REF..HEAD)
+          echo $diff
+          needToRunTests=false
+          for changed_file in $diff; do
             if [[ ${changed_file} =~ ^(src|plugins)\/.+$ ]]; then
-              cantPassWithoutTests=true
+              needToRunTests=true
             fi
-            if [[ ${changed_file} =~ scripts\/mockTests\.ts$ ]]; then
-                cantPassWithoutTests=true
-            fi
-            if [[ ${changed_file} =~ .*ci\.yml$ ]]; then
-                cantPassWithoutTests=true
+            if [[ ${changed_file} =~ ^\.github\/workflows\/.+$ ]]; then
+              needToRunTests=true
             fi
           done
-          echo $cantPassWithoutTests
-          echo CANT_PASS_WITHOUT_TESTS=${cantPassWithoutTests} >> $GITHUB_OUTPUT
+          echo $needToRunTests
+          echo NEED_TO_RUN_TESTS=${needToRunTests} >> $GITHUB_OUTPUT
   build-and-test-e2e-mock:
     runs-on: ubuntu-20.04
     name: Test e2e for PR using mock app
     needs: check-changed-files
-    if: needs['check-changed-files'].outputs.CANT_PASS_WITHOUT_TESTS == 'true'
+    if: needs['check-changed-files'].outputs.NEED_TO_RUN_TESTS == 'true'
     steps:
       - uses: actions/checkout@v4
       - name: 'Install pnpm'
