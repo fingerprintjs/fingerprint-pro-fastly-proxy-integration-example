@@ -41,9 +41,9 @@ async function makeIngressRequest(receivedRequest: Request, env: IntegrationEnv)
     throw new Error('Decryption key not found in secret store')
   }
 
-  try {
-    const response = await fetch(request, { backend: 'fpjs' })
+  const response = await fetch(request, { backend: 'fpjs' })
 
+  try {
     // Parse the open response
     const text = await response.text()
     const parsedText = JSON.parse(text)
@@ -56,8 +56,7 @@ async function makeIngressRequest(receivedRequest: Request, env: IntegrationEnv)
       statusText: response.statusText,
     })
   } catch (e) {
-    console.error('ingress request failed', e)
-    throw e
+    return response
   }
 }
 
