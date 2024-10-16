@@ -2,7 +2,7 @@
 
 import { KVStore } from 'fastly:kv-store'
 import { ProcessOpenClientResponseContext } from '../src/utils/processOpenClientResponse'
-import { PluginType, registerPlugin } from '../src/utils/registerPlugin'
+import { registerPlugin } from '../src/utils/registerPlugin'
 async function fingerprintProcessOpenClientResponseKVStorage(context: ProcessOpenClientResponseContext) {
   const requestId = context.event?.products.identification?.data?.requestId
   if (!requestId) {
@@ -15,5 +15,5 @@ async function fingerprintProcessOpenClientResponseKVStorage(context: ProcessOpe
 registerPlugin({
   name: 'Fingerprint Process Open Client Response with Fastly KV Storage',
   function: fingerprintProcessOpenClientResponseKVStorage,
-  type: PluginType.ProcessOpenClientResponse,
+  type: 'processOpenClientResponse',
 })

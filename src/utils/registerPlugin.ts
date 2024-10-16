@@ -1,13 +1,11 @@
 import { ProcessOpenClientResponseContext } from './processOpenClientResponse'
 
 export type ProcessUnsealedDataPluginFunction = (context: ProcessOpenClientResponseContext) => void | Promise<void>
-export enum PluginType {
-  ProcessOpenClientResponse = 'processOpenClientResponse',
-}
+type PluginType = 'processOpenClientResponse'
 
 export type ProcessOpenClientResponsePlugin = {
   name: string
-  type: PluginType.ProcessOpenClientResponse
+  type: PluginType
   function: ProcessUnsealedDataPluginFunction
 }
 
