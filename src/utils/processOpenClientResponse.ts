@@ -11,7 +11,7 @@ export async function processOpenClientResponse(context: ProcessOpenClientRespon
   for (const filteredPlugin of filteredPlugins) {
     try {
       await filteredPlugin.function(context)
-    } catch (e: any) {
+    } catch (e: unknown) {
       console.error(`Plugin[${filteredPlugin.name}]`, e)
     }
   }
