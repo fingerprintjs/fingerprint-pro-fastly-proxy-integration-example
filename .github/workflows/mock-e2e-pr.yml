@@ -58,7 +58,7 @@ jobs:
           DEFAULT_ORIGIN: ${{secrets.DEFAULT_ORIGIN}}
           FASTLY_API_TOKEN: ${{secrets.FASTLY_API_TOKEN}}
           FPJS_BACKEND_URL: ${{secrets.MOCK_FPCDN}}
-          FPCDN_BACKEND_URL: ${{secrets.MOCK_FPCDN}}
+          FPCDN_URL: ${{secrets.MOCK_FPCDN}}
           CONFIG_STORE_NAME: ${{steps.extract-branch.outputs.SUBDOMAIN}}
         run: pnpm run ci
       - name: Run test

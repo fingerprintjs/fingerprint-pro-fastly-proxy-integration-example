@@ -126,7 +126,7 @@ async function createBackends(service_id: string, version_id: number) {
   await client.createBackend({
     service_id,
     version_id,
-    address: process.env.FPCDN_BACKEND_URL ?? 'fpcdn.io',
+    address: process.env.FPCDN_URL ?? 'fpcdn.io',
     name: 'fpcdn',
     port: 443,
   })
