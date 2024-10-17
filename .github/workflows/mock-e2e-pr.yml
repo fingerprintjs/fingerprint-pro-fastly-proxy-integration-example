@@ -57,7 +57,7 @@ jobs:
         env:
           CONFIG_STORE_NAME: "${{steps.extract-branch.outputs.SUBDOMAIN}}.${{secrets.FPJS_CI_DOMAIN}}"
       - name: Package Fastly WASM File
-        uses: fastly/compute-actions/build@22ed4d3d07e0d2470afa1a5e896de369b7b23a0f
+        uses: fastly/compute-actions/build@v8
       - name: Deploy
         id: deploy
         env:
