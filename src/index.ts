@@ -21,7 +21,7 @@ export async function handleRequest(event: FetchEvent): Promise<Response> {
 function getEnvObject(): IntegrationEnv {
   let config
   try {
-    config = new ConfigStore('Fingerprint')
+    config = new ConfigStore('__CONFIG_STORE_NAME__')
   } catch (e) {
     console.error(e)
   }

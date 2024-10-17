@@ -14,11 +14,18 @@
   },
   "include": [
     "./src/**/*.ts",
+    "./scripts/**/*.ts",
     "./plugins/**/*.ts",
-    "./test/**/*.ts"
+    "./test/**/*.ts",
   ],
   "exclude": [
     "node_modules",
     "./plugins/**/*.example.ts"
-  ]
+  ],
+  "ts-node": {
+    "experimentalSpecifierResolution": "node",
+    "compilerOptions": {
+      "module": "CommonJS"
+    },
+  }
 }
