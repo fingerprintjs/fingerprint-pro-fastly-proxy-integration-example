@@ -8,6 +8,7 @@ import {
 import { getFilteredCookies } from '../utils/cookie'
 import { processOpenClientResponse } from '../utils/processOpenClientResponse'
 import { cloneFastlyResponse } from '../utils/cloneFastlyResponse'
+import { getIngressBackendByRegion } from '../utils/getIngressBackendByRegion'
 
 async function makeIngressRequest(receivedRequest: Request, env: IntegrationEnv) {
   const url = new URL(receivedRequest.url)
@@ -24,7 +25,7 @@ async function makeIngressRequest(receivedRequest: Request, env: IntegrationEnv)
   addProxyIntegrationHeaders(request.headers, receivedRequest.url, env)
 
   console.log(`sending ingress request to ${url.toString()}...`)
-  const response = await fetch(request, { backend: 'fpjs' })
+  const response = await fetch(request, { backend: getIngressBackendByRegion(url) })
 
   if (!isOpenClientResponseEnabled(env)) {
     return response
@@ -48,7 +49,7 @@ function makeCacheEndpointRequest(receivedRequest: Request, routeMatches: RegExp
   request.headers.delete('Cookie')
 
   console.log(`sending cache request to ${url}...`)
-  return fetch(request, { backend: 'fpjs' })
+  return fetch(request, { backend: getIngressBackendByRegion(url) })
 }
 
 export async function handleIngressAPI(
