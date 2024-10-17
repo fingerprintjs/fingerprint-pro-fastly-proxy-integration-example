@@ -51,20 +51,25 @@ jobs:
         id: extract-branch
         run: |
           echo SUBDOMAIN=mock-$(echo ${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}} | perl -pe 's/[^a-zA-Z0-9]+/-/g and s/-+$//g' | tr '[:upper:]' '[:lower:]') >> $GITHUB_OUTPUT
+      - name: Build
+        run: |
+          pnpm build
+        env:
+          CONFIG_STORE_NAME: "${{steps.extract-branch.outputs.SUBDOMAIN}}.${{secrets.FPJS_CI_DOMAIN}}"
       - name: Deploy
         id: deploy
         env:
-          SERVICE_NAME: ${{steps.extract-branch.outputs.SUBDOMAIN}}
+          SERVICE_NAME: "${{steps.extract-branch.outputs.SUBDOMAIN}}.${{secrets.FPJS_CI_DOMAIN}}"
           DEFAULT_ORIGIN: ${{secrets.DEFAULT_ORIGIN}}
           FASTLY_API_TOKEN: ${{secrets.FASTLY_API_TOKEN}}
           FPJS_BACKEND_URL: ${{secrets.MOCK_FPCDN}}
           FPCDN_URL: ${{secrets.MOCK_FPCDN}}
-          CONFIG_STORE_NAME: ${{steps.extract-branch.outputs.SUBDOMAIN}}
+          CONFIG_STORE_NAME: "${{steps.extract-branch.outputs.SUBDOMAIN}}.${{secrets.FPJS_CI_DOMAIN}}"
         run: pnpm run ci
       - name: Run test
         run: pnpm test:mock-e2e
         env:
-          TEST_DOMAIN: 'https://fpjs-fastly-${{steps.extract-branch.outputs.SUBDOMAIN}}.${{secrets.FPJS_CI_DOMAIN}}'
+          TEST_DOMAIN: 'https://fpjs-fastly-${{steps.extract-branch.outputs.SUBDOMAIN}}.${{secrets.FPJS_CI_DOMAIN}}.edgecompute.app'
           INTEGRATION_PATH: ${{secrets.INTEGRATION_PATH}}
           RESULT_PATH: ${{secrets.RESULT_PATH}}
           AGENT_PATH: ${{secrets.AGENT_PATH}}
