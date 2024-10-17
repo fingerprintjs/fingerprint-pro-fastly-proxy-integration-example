@@ -1,9 +1,4 @@
-import {
-  FingerprintDecryptionKeyName,
-  FingerprintSecretStoreName,
-  IntegrationEnv,
-  isOpenClientResponseEnabled,
-} from '../env'
+import { IntegrationEnv, isOpenClientResponseEnabled } from '../env'
 import {
   addProxyIntegrationHeaders,
   addTrafficMonitoringSearchParamsForVisitorIdRequest,
@@ -11,9 +6,8 @@ import {
   createFallbackErrorResponse,
 } from '../utils'
 import { getFilteredCookies } from '../utils/cookie'
-import { SecretStore } from 'fastly:secret-store'
-import { unsealData } from '../utils/unsealData'
 import { processOpenClientResponse } from '../utils/processOpenClientResponse'
+import { cloneFastlyResponse } from '../utils/cloneFastlyResponse'
 
 async function makeIngressRequest(receivedRequest: Request, env: IntegrationEnv) {
   const url = new URL(receivedRequest.url)
@@ -30,34 +24,19 @@ async function makeIngressRequest(receivedRequest: Request, env: IntegrationEnv)
   addProxyIntegrationHeaders(request.headers, receivedRequest.url, env)
 
   console.log(`sending ingress request to ${url.toString()}...`)
-
-  if (!isOpenClientResponseEnabled(env)) {
-    return fetch(request, { backend: 'fpjs' })
-  }
-
-  const secretStore = new SecretStore(FingerprintSecretStoreName)
-  const decryptionKey = await secretStore.get(FingerprintDecryptionKeyName).then((v) => v?.plaintext())
-  if (!decryptionKey) {
-    throw new Error('Decryption key not found in secret store')
-  }
-
   const response = await fetch(request, { backend: 'fpjs' })
 
-  try {
-    // Parse the open response
-    const text = await response.text()
-    const parsedText = JSON.parse(text)
-    const event = await unsealData(parsedText.sealedResult, decryptionKey)
-    void processOpenClientResponse({ event, sealedResult: parsedText.sealedResult }) // void means skip awaiting this and handle it in the background
-
-    return new Response(text, {
-      headers: response.headers,
-      status: response.status,
-      statusText: response.statusText,
-    })
-  } catch (e) {
+  if (!isOpenClientResponseEnabled(env)) {
     return response
   }
+
+  const responseBody = await response.text()
+
+  processOpenClientResponse(responseBody, response).catch((e) =>
+    console.error('failed when processing open client response', e)
+  )
+
+  return cloneFastlyResponse(responseBody, response)
 }
 
 function makeCacheEndpointRequest(receivedRequest: Request, routeMatches: RegExpMatchArray | undefined) {
