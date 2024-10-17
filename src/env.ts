@@ -2,17 +2,18 @@ export type IntegrationEnv = {
   AGENT_SCRIPT_DOWNLOAD_PATH: string | null
   GET_RESULT_PATH: string | null
   PROXY_SECRET: string | null
-  FPJS_CDN_URL: string | null
-  FPJS_INGRESS_BASE_HOST: string | null
+  OPEN_CLIENT_RESPONSE_ENABLED: string | null
 }
 
 const Defaults: IntegrationEnv = {
   AGENT_SCRIPT_DOWNLOAD_PATH: 'agent',
   GET_RESULT_PATH: 'getResult',
   PROXY_SECRET: null,
-  FPJS_CDN_URL: 'fpcdn.io',
-  FPJS_INGRESS_BASE_HOST: 'api.fpjs.io',
+  OPEN_CLIENT_RESPONSE_ENABLED: 'false',
 }
+
+export const FingerprintSecretStoreName = 'FingerprintSecrets'
+export const FingerprintDecryptionKeyName = 'decryptionKey'
 
 function getVarOrDefault(
   variable: keyof IntegrationEnv,
@@ -25,7 +26,7 @@ function getVarOrDefault(
 
 function isVarSet(variable: keyof IntegrationEnv): (env: IntegrationEnv) => boolean {
   return function (env: IntegrationEnv): boolean {
-    return !!env[variable]
+    return Boolean(env[variable]?.trim())
   }
 }
 
@@ -50,6 +51,12 @@ export function getGetResultPath(env: IntegrationEnv): string {
 export const proxySecretVarName = 'PROXY_SECRET'
 const getProxySecretVar = getVarOrDefault(proxySecretVarName, Defaults)
 export const isProxySecretSet = isVarSet(proxySecretVarName)
+
+export const openClientResponseVarName = 'OPEN_CLIENT_RESPONSE_ENABLED'
+export const isOpenClientResponseSet = isVarSet(openClientResponseVarName)
+
+export const isOpenClientResponseEnabled = (env: IntegrationEnv) =>
+  env[openClientResponseVarName]?.toLowerCase() === 'true'
 
 export function getProxySecret(env: IntegrationEnv): string | null {
   return getProxySecretVar(env)
