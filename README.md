@@ -112,6 +112,7 @@ Provide the proxy secret and your chosen resource paths to the service.
    - set `AGENT_SCRIPT_DOWNLOAD_PATH` to your chosen agent download path. It should be something random to avoid ad blockers, for example, `463n7-d0wnl04d`.
    - set `GET_RESULT_PATH` to your chosen identification result path. It should be something random to avoid ad blockers, for example, `1d3n71f1c4710n-r35ul7`.
    - set `PROXY_SECRET` to the value of your Fingerprint proxy secret you created in Step 1.
+   - set `OPEN_CLIENT_RESPONSE_ENABLED` to `true` if open client response is enabled in your subscription; otherwise, set it to `false`.
 
 ### 8. Create a domain for the service
 
