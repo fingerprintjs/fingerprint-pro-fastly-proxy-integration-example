@@ -126,6 +126,20 @@ async function createBackends(service_id: string, version_id: number) {
   await client.createBackend({
     service_id,
     version_id,
+    address: process.env.FPJS_BACKEND_URL ? `eu.${process.env.FPJS_BACKEND_URL}` : 'eu.api.fpjs.io',
+    name: 'eu.fpjs',
+    port: 443,
+  })
+  await client.createBackend({
+    service_id,
+    version_id,
+    address: process.env.FPJS_BACKEND_URL ? `ap.${process.env.FPJS_BACKEND_URL}` : 'ap.api.fpjs.io',
+    name: 'ap.fpjs',
+    port: 443,
+  })
+  await client.createBackend({
+    service_id,
+    version_id,
     address: process.env.FPCDN_URL ?? 'fpcdn.io',
     name: 'fpcdn',
     port: 443,
