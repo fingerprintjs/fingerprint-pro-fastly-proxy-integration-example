@@ -7,7 +7,7 @@ export type IntegrationEnv = {
 
 const Defaults: IntegrationEnv = {
   AGENT_SCRIPT_DOWNLOAD_PATH: 'agent',
-  GET_RESULT_PATH: 'getResult',
+  GET_RESULT_PATH: 'result',
   PROXY_SECRET: null,
   OPEN_CLIENT_RESPONSE_ENABLED: 'false',
 }
