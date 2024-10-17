@@ -56,6 +56,13 @@ jobs:
           pnpm build
         env:
           CONFIG_STORE_NAME: "${{steps.extract-branch.outputs.SUBDOMAIN}}.${{secrets.FPJS_CI_DOMAIN}}"
+      - name: Setup Fastly CLI
+        uses: softprops/setup-fastly-cli@f0e677ae79a680ca8013e58fe9f72ab1060b8724
+        env:
+          FASTLY_API_TOKEN: ${{secrets.FASTLY_API_TOKEN}}
+      - name: Package Fastly WASM File
+        run: |
+          fastly compute pack --wasm-binary=./bin/main.wasm
       - name: Deploy
         id: deploy
         env:
