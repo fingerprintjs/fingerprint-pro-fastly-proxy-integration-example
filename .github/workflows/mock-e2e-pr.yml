@@ -51,6 +51,8 @@ jobs:
         id: extract-branch
         run: |
           echo SUBDOMAIN=mock-$(echo ${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}} | perl -pe 's/[^a-zA-Z0-9]+/-/g and s/-+$//g' | tr '[:upper:]' '[:lower:]') >> $GITHUB_OUTPUT
+      - name: Set up Fastly CLI
+        uses: fastly/compute-actions/setup@v8
       - name: Package Fastly WASM File
         uses: fastly/compute-actions/build@v8
         with:
