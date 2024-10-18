@@ -73,7 +73,7 @@ async function linkConfigStore(service_id: string, version_id: number, resource_
     service_id,
     version_id,
     resource_id,
-    name: `${service_id}-config-store-link-${resource_id}`,
+    name: CONFIG_STORE_NAME,
   })
 }
 
