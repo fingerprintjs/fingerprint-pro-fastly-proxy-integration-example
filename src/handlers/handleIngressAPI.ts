@@ -10,6 +10,13 @@ import { processOpenClientResponse } from '../utils/processOpenClientResponse'
 import { cloneFastlyResponse } from '../utils/cloneFastlyResponse'
 import { getIngressBackendByRegion } from '../utils/getIngressBackendByRegion'
 
+function setHostByRegion(receivedRequest: Request, url: URL) {
+  const region = url.searchParams.get('region') ?? ''
+  if (['eu', 'ap'].includes(region)) {
+    receivedRequest.headers.set('Host', `${region}.${url.hostname}`)
+  }
+}
+
 async function makeIngressRequest(receivedRequest: Request, env: IntegrationEnv) {
   const url = new URL(receivedRequest.url)
   url.pathname = ''
@@ -23,6 +30,7 @@ async function makeIngressRequest(receivedRequest: Request, env: IntegrationEnv)
     request.headers.delete('cookie')
   }
   addProxyIntegrationHeaders(request.headers, receivedRequest.url, env)
+  setHostByRegion(receivedRequest, url)
 
   console.log(`sending ingress request to ${url.toString()}...`)
   const response = await fetch(request, { backend: getIngressBackendByRegion(url) })
@@ -47,6 +55,8 @@ function makeCacheEndpointRequest(receivedRequest: Request, routeMatches: RegExp
 
   const request = new Request(url, receivedRequest)
   request.headers.delete('Cookie')
+
+  setHostByRegion(receivedRequest, url)
 
   console.log(`sending cache request to ${url}...`)
   return fetch(request, { backend: getIngressBackendByRegion(url) })
