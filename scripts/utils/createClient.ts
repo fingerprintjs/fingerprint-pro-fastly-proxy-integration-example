@@ -9,7 +9,6 @@ export type FastlyClientTypes =
   | 'configStoreItem'
   | 'backend'
   | 'resource'
-  | 'purge'
 export function createClient(api: FastlyClientTypes) {
   let client
   switch (api) {
@@ -36,9 +35,6 @@ export function createClient(api: FastlyClientTypes) {
       break
     case 'resource':
       client = new Fastly.ResourceApi()
-      break
-    case 'purge':
-      client = new Fastly.PurgeApi()
       break
   }
   Fastly.ApiClient.instance.authenticate(process.env.FASTLY_API_TOKEN)

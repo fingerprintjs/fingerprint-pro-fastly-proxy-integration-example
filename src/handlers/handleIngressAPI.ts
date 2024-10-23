@@ -9,6 +9,7 @@ import { getFilteredCookies } from '../utils/cookie'
 import { processOpenClientResponse } from '../utils/processOpenClientResponse'
 import { cloneFastlyResponse } from '../utils/cloneFastlyResponse'
 import { getIngressBackendByRegion } from '../utils/getIngressBackendByRegion'
+import { CacheOverride } from 'fastly:cache-override'
 
 async function makeIngressRequest(receivedRequest: Request, env: IntegrationEnv) {
   const url = new URL(receivedRequest.url)
@@ -49,7 +50,7 @@ function makeCacheEndpointRequest(receivedRequest: Request, routeMatches: RegExp
   request.headers.delete('Cookie')
 
   console.log(`sending cache request to ${url}...`)
-  return fetch(request, { backend: getIngressBackendByRegion(url) })
+  return fetch(request, { backend: getIngressBackendByRegion(url), cacheOverride: new CacheOverride('pass') })
 }
 
 export async function handleIngressAPI(

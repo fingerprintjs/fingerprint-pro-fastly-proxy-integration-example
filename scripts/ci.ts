@@ -2,7 +2,6 @@ import { createService } from './api/createService'
 import { createVersion } from './api/createVersion'
 import { deployPackage } from './api/deployPackage'
 import { activateVersion } from './api/activateVersion'
-import { purgeCache } from './api/purgeCache'
 
 async function main() {
   const SERVICE_NAME = process.env.SERVICE_NAME as string
@@ -27,9 +26,6 @@ async function main() {
   console.log('package deployed!')
   await activateVersion(service.id, versionNumber)
   console.log('activated version', versionNumber)
-  console.log('purging all caches before tests')
-  await purgeCache(service.id)
-  console.log('all caches purged before tests')
 }
 
 main()
