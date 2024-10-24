@@ -6,7 +6,7 @@ function makeDownloadScriptRequest(request: Request): Promise<Response> {
   url.pathname = getAgentScriptPath(url.searchParams)
   addTrafficMonitoringSearchParamsForProCDN(url)
 
-  const newRequest = new Request(url.toString(), request)
+  const newRequest = new Request(url.toString(), request as RequestInit)
   newRequest.headers.delete('Cookie')
 
   console.log(`Downloading script from cdnEndpoint ${url.toString()}...`)
