@@ -8,6 +8,8 @@ import {
 import { getFilteredCookies } from '../utils/cookie'
 import { processOpenClientResponse } from '../utils/processOpenClientResponse'
 import { cloneFastlyResponse } from '../utils/cloneFastlyResponse'
+import { getIngressBackendByRegion } from '../utils/getIngressBackendByRegion'
+import { CacheOverride } from 'fastly:cache-override'
 
 async function makeIngressRequest(receivedRequest: Request, env: IntegrationEnv) {
   const url = new URL(receivedRequest.url)
@@ -15,7 +17,7 @@ async function makeIngressRequest(receivedRequest: Request, env: IntegrationEnv)
   addTrafficMonitoringSearchParamsForVisitorIdRequest(url)
   const oldCookieValue = receivedRequest.headers.get('cookie')
   const newCookieValue = getFilteredCookies(oldCookieValue, (key) => key === '_iidt')
-  const request = new Request(url, receivedRequest)
+  const request = new Request(url, receivedRequest as RequestInit)
   if (newCookieValue) {
     request.headers.set('cookie', newCookieValue)
   } else {
@@ -24,7 +26,7 @@ async function makeIngressRequest(receivedRequest: Request, env: IntegrationEnv)
   addProxyIntegrationHeaders(request.headers, receivedRequest.url, env)
 
   console.log(`sending ingress request to ${url.toString()}...`)
-  const response = await fetch(request, { backend: 'fpjs' })
+  const response = await fetch(request, { backend: getIngressBackendByRegion(url) })
 
   if (!isOpenClientResponseEnabled(env)) {
     return response
@@ -44,11 +46,11 @@ function makeCacheEndpointRequest(receivedRequest: Request, routeMatches: RegExp
   const pathname = routeMatches ? routeMatches[1] : undefined
   url.pathname = pathname ?? ''
 
-  const request = new Request(url, receivedRequest)
+  const request = new Request(url, receivedRequest as RequestInit)
   request.headers.delete('Cookie')
 
   console.log(`sending cache request to ${url}...`)
-  return fetch(request, { backend: 'fpjs' })
+  return fetch(request, { backend: getIngressBackendByRegion(url), cacheOverride: new CacheOverride('pass') })
 }
 
 export async function handleIngressAPI(

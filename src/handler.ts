@@ -2,7 +2,6 @@ import { getScriptDownloadPath, getGetResultPath, IntegrationEnv, getStatusPageP
 
 import { handleDownloadScript, handleIngressAPI, handleStatusPage } from './handlers'
 import { createRoute } from './utils'
-import { setClientIp } from './utils/clientIp'
 
 export type Route = {
   pathPattern: RegExp
@@ -62,10 +61,6 @@ export function handleRequestWithRoutes(
 }
 
 export async function handleReq(request: Request, env: IntegrationEnv): Promise<Response> {
-  const clientIp = request.headers.get('Fastly-Client-IP')
-  if (clientIp) {
-    setClientIp(clientIp)
-  }
   const routes = createRoutes(env)
   return handleRequestWithRoutes(request, env, routes)
 }

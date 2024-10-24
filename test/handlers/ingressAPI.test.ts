@@ -30,7 +30,7 @@ describe('Browser Cache', () => {
 
     expect(fetch).toBeCalledWith(
       expect.objectContaining({ method: 'GET' }),
-      expect.objectContaining({ backend: 'fpjs' })
+      expect.objectContaining({ backend: 'fpjs', cacheOverride: expect.objectContaining({ mode: 'pass' }) })
     )
   })
 
@@ -123,10 +123,9 @@ describe('Ingress', () => {
 
     const request = makeRequest(new URL('https://test/result'), {
       method: 'POST',
-      headers: { 'Fastly-Client-IP': '127.0.0.1' },
     })
     await handleRequest(request)
 
-    expect(requestHeaders.get('FPJS-Proxy-Client-IP')).toBe('127.0.0.1')
+    expect(requestHeaders.get('FPJS-Proxy-Client-IP')).toBe('test')
   })
 })
