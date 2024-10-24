@@ -42,7 +42,7 @@ This is a quick overview of the installation setup. For detailed step-by-step in
    | AGENT_SCRIPT_DOWNLOAD_PATH   | z5kms2               | Random path segment for downloading the JS agent                                            |
    | GET_RESULT_PATH              | nocmjw               | Random path segment Fingerprint identification requests                                     |
 
-3. Go to [Releases](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/releases) to download the latest `fingerprint-proxy-integration.tar.gz` template file.
+3. Go to [Releases](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/releases) to download the latest `fingerprint-proxy-integration.tar.gz` package file.
 4. Upload package to your Fastly Compute Service's **Package**.
 5. Configure the Fingerprint [JS Agent](https://dev.fingerprint.com/docs/js-agent) on your website using the paths defined in Step 2.
     ```javascript
