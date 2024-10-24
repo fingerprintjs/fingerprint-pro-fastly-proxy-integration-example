@@ -2,7 +2,7 @@
   "extends": "./node_modules/@fingerprintjs/tsconfig-dx-team/tsconfig.json",
   "compilerOptions": {
     "strict": true,
-    "module": "es6",
+    "module": "es2020",
     "target": "es2020",
     "moduleResolution": "node",
     "esModuleInterop": true,
@@ -14,9 +14,11 @@
   },
   "include": [
     "./src/**/*.ts",
+    "./plugins/**/*.ts",
     "./test/**/*.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "./plugins/**/*.example.ts"
   ]
 }

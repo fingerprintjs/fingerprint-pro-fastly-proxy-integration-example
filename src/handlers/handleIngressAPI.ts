@@ -1,4 +1,4 @@
-import { IntegrationEnv } from '../env'
+import { IntegrationEnv, isOpenClientResponseEnabled } from '../env'
 import {
   addProxyIntegrationHeaders,
   addTrafficMonitoringSearchParamsForVisitorIdRequest,
@@ -6,6 +6,8 @@ import {
   createFallbackErrorResponse,
 } from '../utils'
 import { getFilteredCookies } from '../utils/cookie'
+import { processOpenClientResponse } from '../utils/processOpenClientResponse'
+import { cloneFastlyResponse } from '../utils/cloneFastlyResponse'
 
 async function makeIngressRequest(receivedRequest: Request, env: IntegrationEnv) {
   const url = new URL(receivedRequest.url)
@@ -22,7 +24,19 @@ async function makeIngressRequest(receivedRequest: Request, env: IntegrationEnv)
   addProxyIntegrationHeaders(request.headers, receivedRequest.url, env)
 
   console.log(`sending ingress request to ${url.toString()}...`)
-  return fetch(request, { backend: 'fpjs' })
+  const response = await fetch(request, { backend: 'fpjs' })
+
+  if (!isOpenClientResponseEnabled(env)) {
+    return response
+  }
+
+  const responseBody = await response.text()
+
+  processOpenClientResponse(responseBody, response).catch((e) =>
+    console.error('failed when processing open client response', e)
+  )
+
+  return cloneFastlyResponse(responseBody, response)
 }
 
 function makeCacheEndpointRequest(receivedRequest: Request, routeMatches: RegExpMatchArray | undefined) {

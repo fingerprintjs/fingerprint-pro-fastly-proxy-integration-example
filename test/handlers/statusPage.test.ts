@@ -41,6 +41,8 @@ describe('Status Page', () => {
     config.set('GET_RESULT_PATH', 'result')
     // @ts-ignore
     config.set('PROXY_SECRET', 'secret')
+    // @ts-ignore
+    config.set('OPEN_CLIENT_RESPONSE_ENABLED', 'true')
 
     const request = makeRequest(new URL('https://test/status'))
     const response = await handleRequest(request)
