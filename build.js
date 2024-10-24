@@ -10,6 +10,6 @@ esbuild
     bundle: true,
     format: 'cjs',
     external: ['fastly:*'],
-    define: { 'process.env.CONFIG_STORE_NAME': JSON.stringify(configStoreName) },
+    define: { 'process.env.CONFIG_STORE_NAME': `"${configStoreName}"` },
   })
   .catch(() => process.exit(1))
