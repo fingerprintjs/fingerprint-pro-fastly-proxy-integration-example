@@ -48,12 +48,8 @@
       {
         "assets":[
           {
-            "path":"bin/main.wasm",
-            "label":"fingerprint-pro-fastly-compute-worker.wasm"
-          },
-          {
-            "path":"build",
-            "label":"fingerprint-pro-fastly-compute-worker-javascript"
+            "path":"pkg/package.tar.gz",
+            "label":"fingerprint-proxy-integration.tar.gz"
           }
         ]
       }
