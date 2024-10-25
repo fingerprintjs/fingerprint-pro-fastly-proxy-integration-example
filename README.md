@@ -25,7 +25,7 @@ The Fastly Compute Proxy Integration is responsible for proxying identification 
 
 * **Manual updates occasionally required**: The underlying data contract in the identification logic can change to keep up with browser updates. Using the Fastly Compute@Edge Proxy Integration might require occasional manual updates on your side. Ignoring these updates will lead to lower accuracy or service disruption.
 
-# Getting started
+## Getting started
 
 This is a quick overview of the installation setup. For detailed step-by-step instructions, see the [Fastly Compute@Edge proxy integration guide in our documentation](https://dev.fingerprint.com/docs/fastly-compute-edge-proxy-integration).
 
@@ -61,7 +61,7 @@ This is a quick overview of the installation setup. For detailed step-by-step in
 
 See the [Fastly Compute@Edge proxy integration guide](https://dev.fingerprint.com/docs/fastly-compute-edge-proxy-integration#step-9-configure-the-fingerprint-client-agent-on-to-use-your-service) in our documentation for more details.
 
-# Using a custom config store name
+### Using a custom config store name
 
 The worker package provided in Releases assumes the config store used by the integration is named exactly `Fingerprint`. If you need to use a different config store name, you can pass the name to the `CONFIG_STORE_NAME` environment variable and build a custom worker package:
 
