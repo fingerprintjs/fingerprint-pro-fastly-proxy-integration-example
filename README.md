@@ -49,11 +49,11 @@ This is a quick overview of the installation setup. For detailed step-by-step in
    const fpPromise = FingerprintJS.load({
      apiKey: 'PUBLIC_API_KEY',
      scriptUrlPattern: [
-       'https://yourwebsite.com/INTEGRATION-PATH/AGENT_SCRIPT_DOWNLOAD_PATH?apiKey=<apiKey>&version=<version>&loaderVersion=<loaderVersion>',
+       'https://metrics.yourwebsite.com/AGENT_SCRIPT_DOWNLOAD_PATH?apiKey=<apiKey>&version=<version>&loaderVersion=<loaderVersion>',
        FingerprintJS.defaultScriptUrlPattern, // Fallback to default CDN in case of error
      ],
      endpoint: [
-       'https://yourwebsite.com/INTEGRATION-PATH/GET_RESULT_PATH?region=us',
+       'https://metrics.yourwebsite.com/GET_RESULT_PATH?region=us',
        FingerprintJS.defaultEndpoint // Fallback to default endpoint in case of error
      ],
    });
