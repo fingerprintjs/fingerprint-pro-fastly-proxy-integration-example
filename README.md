@@ -15,7 +15,7 @@
 
 # Fingerprint Pro Fastly Compute@Edge Proxy Integration
 
-[Fingerprint](https://fingerprint.com) is a device intelligence platform offering 99.5% accurate visitor identification.
+[Fingerprint](https://fingerprint.com) is a device intelligence platform offering highly accurate visitor identification.
 
 This custom Fastly Proxy Integration example is responsible for proxying identification and agent-download requests between your application and Fingerprint through your Fastly infrastructure. This integration uses [Fastly Compute services](https://www.fastly.com/products/compute).
 
