@@ -29,7 +29,7 @@ The Fastly Compute Proxy Integration is responsible for proxying identification 
 
 This is a quick overview of the installation setup. For detailed step-by-step instructions, see the [Fastly Compute@Edge proxy integration guide in our documentation](https://dev.fingerprint.com/docs/fastly-compute-edge-proxy-integration).
 
-1. Go to Fingerprint Dashboard > API Keys and click Create Proxy Key to create a proxy secret. You will use it later to authenticate your requests to Fingerprint APIs.
+1. Go to the Fingerprint Dashboard > [**API Keys**](https://dashboard.fingerprint.com/api-keys) and click **Create Proxy Key** to create a proxy secret. You will use it later to authenticate your requests to Fingerprint APIs.
 
 2. Create a Config Store in your Fastly Compute Service named Fingerprint and add the following values:
 
