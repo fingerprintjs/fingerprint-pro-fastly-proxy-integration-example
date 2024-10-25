@@ -9,12 +9,7 @@ import { setClientIp } from './utils/clientIp'
 addEventListener('fetch', (event) => event.respondWith(handleRequest(event)))
 
 export async function handleRequest(event: FetchEvent): Promise<Response> {
-  setClientIp(
-    event.client.address ??
-      event.request.headers.get('Fastly-Client-IP') ??
-      event.request.headers.get('X-Forwarded-For') ??
-      ''
-  )
+  setClientIp(event.client.address)
   try {
     const request = event.request
     const envObj = getEnvObject()
