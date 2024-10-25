@@ -52,8 +52,7 @@ function createEnvVarsInformationElement(env: IntegrationEnv): string {
   const isGetResultPathAvailable = isGetResultPathSet(env)
   const isProxySecretAvailable = isProxySecretSet(env)
   const isOpenClientResponseVarSet = isOpenClientResponseSet(env)
-  const isAllVarsAvailable =
-    isScriptDownloadPathAvailable && isGetResultPathAvailable && isProxySecretAvailable && isOpenClientResponseVarSet
+  const isAllVarsAvailable = isScriptDownloadPathAvailable && isGetResultPathAvailable && isProxySecretAvailable
 
   let result = ''
   if (!isAllVarsAvailable) {
@@ -83,21 +82,23 @@ function createEnvVarsInformationElement(env: IntegrationEnv): string {
       </span>
       `
     }
-
-    if (!isOpenClientResponseVarSet) {
-      result += `
-      <span>
-      ⚠️ <strong>${openClientResponseVarName} </strong> is not set
-      </span>
-      `
-    }
   } else {
     result += `
     <span>
-     ✅ All environment variables are set
+     ✅ All required environment variables are set
     </span>
     `
   }
+
+  if (!isOpenClientResponseVarSet) {
+    result += `
+      <span>
+      ⚠️ <strong>${openClientResponseVarName} </strong> optional environment variable is not set<br />
+         <i>This environment variable is optional; your integration will work without the 'Open Client Response' feature. If you didn't set it intentionally, you can ignore this warning.</i>
+      </span>
+      `
+  }
+
   return result
 }
 
