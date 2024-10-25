@@ -31,7 +31,7 @@ This is a quick overview of the installation setup. For detailed step-by-step in
 
 1. Go to the Fingerprint Dashboard > [**API Keys**](https://dashboard.fingerprint.com/api-keys) and click **Create Proxy Key** to create a proxy secret. You will use it later to authenticate your requests to Fingerprint APIs.
 
-2. Create a Config Store in your Fastly Compute Service named Fingerprint and add the following values:
+2. [Create a Config store](https://docs.fastly.com/en/guides/working-with-config-stores#creating-a-config-store) in your Fastly account named `Fingerprint` and add the following values:
 
    | Key                          | Example Value        | Description                                                                                 |
    |------------------------------|----------------------|---------------------------------------------------------------------------------------------|
