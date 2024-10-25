@@ -31,14 +31,14 @@ This is a quick overview of the installation setup. For detailed step-by-step in
 
 1. Go to the Fingerprint Dashboard > [**API Keys**](https://dashboard.fingerprint.com/api-keys) and click **Create Proxy Key** to create a proxy secret. You will use it later to authenticate your requests to Fingerprint APIs.
 
-2. [Create a Config store](https://docs.fastly.com/en/guides/working-with-config-stores#creating-a-config-store) in your Fastly account named `Fingerprint` and add the following values:
+2. [Create a Config store](https://docs.fastly.com/en/guides/working-with-config-stores#creating-a-config-store) in your Fastly account named exactly `Fingerprint` and add the following values:
 
    | Key                          | Example Value        | Description                                                                                 |
    |------------------------------|----------------------|---------------------------------------------------------------------------------------------|
-   | PROXY_SECRET                 | 6XI9CLf3C9oHSB12TTaI | Fingerprint proxy secret generated in Step 1                                                |
+   | PROXY_SECRET                 | 6XI9CLf3C9oHSB12TTaI | Fingerprint proxy secret generated in Step 1.                                                |
    | OPEN_CLIENT_RESPONSE_ENABLED | false                | Set to `true` if you have [Open client response](https://dev.fingerprint.com/docs/open-client-response) enabled for your Fingerprint application. Defaults to `false`. |
-   | AGENT_SCRIPT_DOWNLOAD_PATH   | z5kms2               | Random path segment for downloading the JavaScript agent                                            |
-   | GET_RESULT_PATH              | nocmjw               | Random path segment for Fingerprint identification requests                                     |
+   | AGENT_SCRIPT_DOWNLOAD_PATH   | z5kms2               | Random path segment for downloading the JavaScript agent.                                           |
+   | GET_RESULT_PATH              | nocmjw               | Random path segment for Fingerprint identification requests.                                     |
 
 3. Go to [Releases](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/releases) to download the latest `fingerprint-proxy-integration.tar.gz` package file.
 4. Upload package to your Fastly Compute Service's **Package**.
@@ -61,17 +61,13 @@ This is a quick overview of the installation setup. For detailed step-by-step in
 
 See the [Fastly Compute@Edge proxy integration guide](https://dev.fingerprint.com/docs/fastly-compute-edge-proxy-integration#step-9-configure-the-fingerprint-client-agent-on-to-use-your-service) in our documentation for more details.
 
-# Custom Build
+# Using a custom config store name
 
-If you would like to use a custom build, you can run this command and you can use the new package file at `pkg/package.tar.gz`
-To creating a custom build you can run this command:
+The worker package provided in Releases assumes the config store used by the integration is named exactly `Fingerprint`. If you need to use a different config store name, you can pass the name to the `CONFIG_STORE_NAME` environment variable and build a custom worker package:
 
 ```shell
-CONFIG_STORE_NAME=Fingerprint pnpm run build
+CONFIG_STORE_NAME=MyCustomStoreName pnpm run build
 ```
-
-The env variable's value on the command `CONFIG_STORE_NAME=Fingerprint` can be changed anything you like, but you should also update your
-ConfigStore on Fastly and it's Resource Link name with the same value.
 
 ## Feedback and support
 
