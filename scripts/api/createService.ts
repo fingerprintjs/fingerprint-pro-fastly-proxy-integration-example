@@ -121,7 +121,7 @@ async function createBackends(service_id: string, version_id: number) {
     version_id,
     address: process.env.FPJS_BACKEND_URL ?? 'api.fpjs.io',
     override_host: process.env.FPJS_BACKEND_URL ?? 'api.fpjs.io',
-    name: 'fpjs',
+    name: 'api.fpjs.io',
     port: 443,
   })
   await client.createBackend({
@@ -129,7 +129,7 @@ async function createBackends(service_id: string, version_id: number) {
     version_id,
     address: process.env.FPJS_BACKEND_URL ? `eu.${process.env.FPJS_BACKEND_URL}` : 'eu.api.fpjs.io',
     override_host: process.env.FPJS_BACKEND_URL ? `eu.${process.env.FPJS_BACKEND_URL}` : 'eu.api.fpjs.io',
-    name: 'eu.fpjs',
+    name: 'eu.api.fpjs.io',
     port: 443,
   })
   await client.createBackend({
@@ -137,7 +137,7 @@ async function createBackends(service_id: string, version_id: number) {
     version_id,
     address: process.env.FPJS_BACKEND_URL ? `ap.${process.env.FPJS_BACKEND_URL}` : 'ap.api.fpjs.io',
     override_host: process.env.FPJS_BACKEND_URL ? `ap.${process.env.FPJS_BACKEND_URL}` : 'ap.api.fpjs.io',
-    name: 'ap.fpjs',
+    name: 'ap.api.fpjs.io',
     port: 443,
   })
   await client.createBackend({
@@ -145,7 +145,7 @@ async function createBackends(service_id: string, version_id: number) {
     version_id,
     address: process.env.FPCDN_URL ?? 'fpcdn.io',
     override_host: process.env.FPCDN_URL ?? 'fpcdn.io',
-    name: 'fpcdn',
+    name: 'fpcdn.io',
     port: 443,
   })
 }

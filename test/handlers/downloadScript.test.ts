@@ -81,7 +81,7 @@ describe('Download Script', () => {
     expect(fetch).toHaveBeenCalledWith(
       expect.anything(),
       expect.objectContaining({
-        backend: 'fpcdn',
+        backend: 'fpcdn.io',
         cacheOverride: expect.objectContaining({ mode: 'override', options: { ttl: 60 } }),
       })
     )

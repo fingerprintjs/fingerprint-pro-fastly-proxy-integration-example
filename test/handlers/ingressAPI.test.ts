@@ -30,7 +30,7 @@ describe('Browser Cache', () => {
 
     expect(fetch).toBeCalledWith(
       expect.objectContaining({ method: 'GET' }),
-      expect.objectContaining({ backend: 'fpjs', cacheOverride: expect.objectContaining({ mode: 'pass' }) })
+      expect.objectContaining({ backend: 'api.fpjs.io', cacheOverride: expect.objectContaining({ mode: 'pass' }) })
     )
   })
 
@@ -68,7 +68,7 @@ describe('Ingress', () => {
 
     expect(fetch).toBeCalledWith(
       expect.objectContaining({ method: 'POST' }),
-      expect.objectContaining({ backend: 'fpjs' })
+      expect.objectContaining({ backend: 'api.fpjs.io' })
     )
   })
 

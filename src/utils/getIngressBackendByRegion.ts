@@ -2,11 +2,11 @@ export function getIngressBackendByRegion(url: URL) {
   const region = url.searchParams.get('region')
   switch (region) {
     case 'eu':
-      return 'eu.fpjs'
+      return 'eu.api.fpjs.io'
     case 'ap':
-      return 'ap.fpjs'
+      return 'ap.api.fpjs.io'
     case 'us':
     default:
-      return 'fpjs'
+      return 'api.fpjs.io'
   }
 }

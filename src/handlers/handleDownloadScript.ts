@@ -11,7 +11,7 @@ function makeDownloadScriptRequest(request: Request): Promise<Response> {
 
   console.log(`Downloading script from cdnEndpoint ${url.toString()}...`)
   const cache = new CacheOverride('override', { ttl: 60 }) // Caches sub-request by 60 seconds for agent download script
-  return fetch(newRequest, { backend: 'fpcdn', cacheOverride: cache })
+  return fetch(newRequest, { backend: 'fpcdn.io', cacheOverride: cache })
 }
 
 export async function handleDownloadScript(request: Request): Promise<Response> {
