@@ -38,7 +38,7 @@ This is a quick overview of the installation setup. For detailed step-by-step in
    | PROXY_SECRET                 | 6XI9CLf3C9oHSB12TTaI | Fingerprint proxy secret generated in Step 1                                                |
    | OPEN_CLIENT_RESPONSE_ENABLED | false                | Set to `true` if you have [Open client response](https://dev.fingerprint.com/docs/open-client-response) enabled for your Fingerprint application. Defaults to `false`. |
    | AGENT_SCRIPT_DOWNLOAD_PATH   | z5kms2               | Random path segment for downloading the JavaScript agent                                            |
-   | GET_RESULT_PATH              | nocmjw               | Random path segment Fingerprint identification requests                                     |
+   | GET_RESULT_PATH              | nocmjw               | Random path segment for Fingerprint identification requests                                     |
 
 3. Go to [Releases](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/releases) to download the latest `fingerprint-proxy-integration.tar.gz` package file.
 4. Upload package to your Fastly Compute Service's **Package**.
