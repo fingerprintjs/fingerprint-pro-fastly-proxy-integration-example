@@ -61,6 +61,18 @@ This is a quick overview of the installation setup. For detailed step-by-step in
 
 See the [Fastly Compute@Edge proxy integration guide](https://dev.fingerprint.com/docs/fastly-compute-edge-proxy-integration#step-9-configure-the-fingerprint-client-agent-on-to-use-your-service) in our documentation for more details.
 
+# Custom Build
+
+If you would like to use a custom build, you can run this command and you can use the new package file at `pkg/package.tar.gz`
+To creating a custom build you can run this command:
+
+```shell
+CONFIG_STORE_NAME=Fingerprint pnpm run build
+```
+
+The env variable's value on the command `CONFIG_STORE_NAME=Fingerprint` can be changed anything you like, but you should also update your
+ConfigStore on Fastly and it's Resource Link name with the same value.
+
 ## Feedback and support
 
 Please reach out to our [Customer Success team](https://fingerprint.com/support/) if run into any issues with the integration.
