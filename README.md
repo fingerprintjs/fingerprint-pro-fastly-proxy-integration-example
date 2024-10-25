@@ -42,7 +42,7 @@ This is a quick overview of the installation setup. For detailed step-by-step in
 
 3. Go to [Releases](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/releases) to download the latest `fingerprint-proxy-integration.tar.gz` package file.
 4. Upload package to your Fastly Compute Service's **Package**.
-5. Configure the Fingerprint [JS Agent](https://dev.fingerprint.com/docs/js-agent) on your website using the paths defined in Step 2.
+5. Configure the Fingerprint [JavaScript Agent](https://dev.fingerprint.com/docs/install-the-javascript-agent#configuring-the-agent) on your website using the paths defined in Step 2.
     ```javascript
    import * as FingerprintJS from '@fingerprintjs/fingerprintjs-pro'
 
