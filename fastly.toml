@@ -3,7 +3,7 @@
 
 authors = []
 cloned_from = "https://github.com/fastly/compute-starter-kit-typescript"
-description = ""
+description = "Fingerprint Proxy Fastly Compute@Edge Package"
 language = "javascript"
 manifest_version = 3
 name = "fingerprint-pro-fastly-proxy-integration"
