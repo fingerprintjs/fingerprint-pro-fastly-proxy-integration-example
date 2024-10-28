@@ -1,4 +1,5 @@
 import { EventResponse } from '@fingerprintjs/fingerprintjs-pro-server-api'
+import loadedPlugins from '../../plugins'
 
 export type ProcessOpenClientResponseContext = {
   event: EventResponse | null
@@ -15,8 +16,4 @@ export type ProcessOpenClientResponsePlugin = {
 }
 
 export type Plugin = ProcessOpenClientResponsePlugin // This type will be union of types if more plugin/hook types gets introduced
-export const plugins: Plugin[] = []
-
-export function registerPlugin(plugin: Plugin) {
-  plugins.push(plugin)
-}
+export const plugins: Plugin[] = loadedPlugins
