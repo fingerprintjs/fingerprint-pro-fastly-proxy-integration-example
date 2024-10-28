@@ -1,8 +1,8 @@
 // To enable this plugin, please replace the suffix from `.example.ts` to `.ts`
 
 import { KVStore } from 'fastly:kv-store'
-import { ProcessOpenClientResponseContext, registerPlugin } from '../src/utils/registerPlugin'
-async function fingerprintProcessOpenClientResponseKVStorage(context: ProcessOpenClientResponseContext) {
+import { ProcessOpenClientResponseContext } from '../src/utils/registerPlugin'
+export async function fingerprintProcessOpenClientResponseKVStorage(context: ProcessOpenClientResponseContext) {
   const requestId = context.event?.products.identification?.data?.requestId
   if (!requestId) {
     return
@@ -10,9 +10,3 @@ async function fingerprintProcessOpenClientResponseKVStorage(context: ProcessOpe
   const store = new KVStore('FingerprintResults')
   await store.put(requestId, JSON.stringify(context.event))
 }
-
-registerPlugin({
-  name: 'Fingerprint Process Open Client Response with Fastly KV Storage',
-  callback: fingerprintProcessOpenClientResponseKVStorage,
-  type: 'processOpenClientResponse',
-})
