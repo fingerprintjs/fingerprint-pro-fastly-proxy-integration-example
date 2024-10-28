@@ -4,10 +4,12 @@ import { IntegrationEnv } from './env'
 import { ConfigStore } from 'fastly:config-store'
 import { returnHttpResponse } from './utils/returnHttpResponse'
 import { createFallbackErrorResponse } from './utils'
+import { setClientIp } from './utils/clientIp'
 
 addEventListener('fetch', (event) => event.respondWith(handleRequest(event)))
 
 export async function handleRequest(event: FetchEvent): Promise<Response> {
+  setClientIp(event.client.address)
   try {
     const request = event.request
     const envObj = getEnvObject()
@@ -21,7 +23,7 @@ export async function handleRequest(event: FetchEvent): Promise<Response> {
 function getEnvObject(): IntegrationEnv {
   let config
   try {
-    config = new ConfigStore('Fingerprint')
+    config = new ConfigStore(process.env.CONFIG_STORE_NAME ?? 'Fingerprint')
   } catch (e) {
     console.error(e)
   }

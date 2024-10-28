@@ -48,7 +48,7 @@ describe('Status Page', () => {
     const response = await handleRequest(request)
 
     const responseText = await response.text()
-    const isAllSet = responseText.includes('All environment variables are set')
+    const isAllSet = responseText.includes('All required environment variables are set')
 
     expect(isAllSet).toBe(true)
   })

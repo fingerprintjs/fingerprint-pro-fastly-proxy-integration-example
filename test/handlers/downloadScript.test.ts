@@ -78,6 +78,12 @@ describe('Download Script', () => {
     const request = makeRequest(new URL('https://test/download'))
     await handleRequest(request)
 
-    expect(fetch).toHaveBeenCalledWith(expect.anything(), expect.objectContaining({ backend: 'fpcdn' }))
+    expect(fetch).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        backend: 'fpcdn.io',
+        cacheOverride: expect.objectContaining({ mode: 'override', options: { ttl: 60 } }),
+      })
+    )
   })
 })
