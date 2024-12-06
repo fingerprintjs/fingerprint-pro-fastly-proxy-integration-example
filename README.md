@@ -9,8 +9,8 @@
 <p align="center">
 <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/:license-mit-blue.svg" alt="MIT license"></a>
 
-> [!CAUTION]
-> This is an example of a custom Fingerprint proxy integration with Fastly. The example is still in the **BETA** stage of development and support is provided only to specific Enterprise customers. If that is not you, do not use this example in production.
+> [!Caution]
+> This project is no longer maintained and should not be used in production. Please refer to [Fastly Proxy Integration documentation](https://dev.fingerprint.com/docs/fastly-compute-proxy-integration) if you are interested in the up-to-date project.
 
 # Fingerprint Pro Fastly Proxy Integration Example
 
