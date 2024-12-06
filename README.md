@@ -49,7 +49,7 @@ You will use the secret to authenticate requests from your proxy integration to 
 
 ### 3. Install and configure the Fastly CLI
 
-1. Install the Fastly CLI on your computer following [Fastly documentation](https://developer.fastly.com/learning/compute/#install-the-fastly-cli).
+1. Install the Fastly CLI on your computer following [Fastly documentation](https://www.fastly.com/documentation/guides/compute/#set-up-the-development-environment).
 2. Configure the CLI profile with the token you created in the previous step:
    
     ```
