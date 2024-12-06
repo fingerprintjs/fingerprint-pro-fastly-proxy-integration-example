@@ -9,7 +9,7 @@
 <p align="center">
 <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/:license-mit-blue.svg" alt="MIT license"></a>
 
-> [!DEPRECATED]
+> :no_entry: [DEPRECATED]
 > This project is no longer maintained and should not be used in production. Please refer to [Fastly Proxy Integration documentation](https://dev.fingerprint.com/docs/fastly-compute-proxy-integration) if you are interested in the up-to-date project.
 
 > [!CAUTION]
